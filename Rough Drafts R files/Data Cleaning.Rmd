@@ -1,0 +1,152 @@
+---
+title: "Data Science Final Project"
+author: "Carrie Magee, Abhimanyu Barun, Ambar Pathak, Kismat Khatri"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+library(ezids)
+library(dplyr)
+library(corrplot)
+library(readr)
+library(caret)
+
+gss_0 <- data.frame(read.csv("GSS_5.csv"))
+
+gss_0 = subset(gss_0, select = -c(id_))
+
+gss_1 = subset(gss_0, happy == 1 | happy == 2 | happy == 3)
+
+gss_2 = subset(gss_1, satjob == 1 | satjob == 2 | satjob == 3 | satjob == 4)
+
+gss_3 = subset(gss_2, satfin == 1 | satfin == 2 | satfin == 3)
+
+gss_4 = subset(gss_3, class_ == 1 | class_ == 2 | class_ == 3 | class_ == 4 | class_ == 5)
+
+gss_5 = subset(gss_4, educ >= 0 & hrs1 >= 0 & sphrs1 >= 0 & speduc >= 0 & spdeg >= 0 & degree >= 0 & hapmar >= 0 & income >= 0 & rincome >= 0 & childs >= 0 & hompop >= 0 & earnrs >= 0)
+
+gss_5$degree <- factor(gss_5$degree)
+gss_5$spdeg <- factor(gss_5$spdeg)
+gss_5$income <- factor(gss_5$income)
+gss_5$rincome <- factor(gss_5$rincome)
+gss_5$happy <- factor(gss_5$happy)
+gss_5$hapmar <- factor(gss_5$hapmar)
+gss_5$satjob <- factor(gss_5$satjob)
+gss_5$class_ <- factor(gss_5$class_)
+gss_5$satfin <- factor(gss_5$satfin)
+gss_5$childs <- factor(gss_5$childs)
+gss_5$earnrs <- factor(gss_5$earnrs)
+
+str(gss_5)
+
+```
+
+## CORR
+
+```{r}
+summary(gss_5)
+
+str(gss_5)
+
+corrplot(cor(gss_5[ , -c(4, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17)]), method = 'number', type = 'lower', tl.cex = 0.8, number.cex = 0.6)
+```
+
+## ques3 - logistic - Ordinal Logistic regression https://statisticsbyjim.com/regression/choosing-regression-analysis/
+
+```{r}
+# incorrect
+ques3_1 <- glm(hapmar ~ educ + speduc + hrs1 + sphrs1 + childs + hompop + year + earnrs + happy + hapmar + satjob + satfin, data = gss_5, binomial(link = "logit"))
+
+summary(ques3_1)
+
+```
+
+https://towardsdatascience.com/implementing-and-interpreting-ordinal-logistic-regression-1ee699274cf5
+
+```{r}
+# correct
+library(MASS)
+
+ques3_2 <- polr(hapmar ~ educ + speduc + hrs1 + sphrs1 + childs + hompop + year + earnrs + happy + hapmar + satjob + satfin, data = gss_5, Hess = TRUE)
+
+summary(ques3_2)
+
+```
+https://peopleanalytics-regression-book.org/ord-reg.html
+
+```{r}
+
+summary_table <- coef(summary(ques3_2))
+pval <- pnorm(abs(summary_table[, "t value"]),lower.tail = FALSE)* 2
+summary_table <- cbind(summary_table, "p value" = round(pval,3))
+summary_table
+
+```
+
+## Ques 1 Linear Regression / Anova test
+
+```{r}
+
+lm_1 <- lm(hrs1 ~ year + sphrs1 + educ + speduc + hompop, data = gss_5)
+
+summary(lm_1)
+
+```
+
+
+```{r}
+
+ques1 <- aov(hrs1 ~ degree + spdeg + income + rincome + hapmar + satjob + satfin + childs, data = gss_5)
+
+summary(ques1)
+
+```
+
+```{r}
+
+ques_1_manova <- manova(cbind(degree, spdeg, income, rincome, hapmar, satjob, satfin, childs) ~ hrs1, data = gss_5)
+
+summary.aov(ques_1_manova)
+
+```
+
+## Ques 2
+
+```{r}
+
+ques2 <- aov(sphrs1 ~ degree + spdeg + income + rincome + class_ + satfin + childs + earnrs, data = gss_5)
+
+summary(ques2)
+
+```
+
+```{r}
+
+ques_2_manova <- manova(cbind(degree, spdeg, income, rincome, class_, satfin, childs, earnrs) ~ sphrs1, data = gss_5)
+
+summary.aov(ques_2_manova)
+
+```
+
+
+## Ques 4
+
+```{r}
+
+ques4_2 <- polr(childs ~ educ + speduc + hrs1 + sphrs1 + degree + spdeg + hompop + year + earnrs + income + rincome + happy + hapmar + class_ + satjob + satfin, data = gss_5, Hess = TRUE)
+
+summary(ques4_2)
+
+```
+
+```{r}
+
+summary_table <- coef(summary(ques4_2))
+pval <- pnorm(abs(summary_table[, "t value"]),lower.tail = FALSE)* 2
+summary_table <- cbind(summary_table, "p value" = round(pval,3))
+summary_table
+
+```
