@@ -1,0 +1,105 @@
+---
+title: "project101"
+output: html_document
+date: "2022-12-04"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ezids)
+library(ggplot2)
+library(plyr)
+library(corrplot)
+```
+
+## SMART QUESTION
+
+### Does the age at which adolescents start engaging in "deviant" behaviors predict their interpersonal, physical, and mental well-being? Furthermore, how does race influence interpersonal, physical, and mental well-being?
+
+
+```{r cars}
+dataset = read.csv("/Users/carriemagee/Downloads/sadc_df.csv")
+# select variables v1, v2, v3
+myvars <- c("Age_Alc", "Age_Weed","multiple_partners","physical_activity","Hrs_Sleep","age_sex","race","gender","fight","suicide")
+data <- dataset[myvars]
+```
+
+```{r}
+loadPkg("ggplot2")
+data$Age_Alc <- as.factor(data$Age_Alc)
+ggplot(data, aes(x=Age_Alc, y=Hrs_Sleep)) + 
+  geom_boxplot(outlier.shape = NA) +
+  labs(title="Hours of Sleep By Age when First started Drinking")
+```
+```{r}
+data$Age_Alc <- as.factor(data$Age_Alc)
+ggplot(data, aes(x=Age_Alc, y=multiple_partners)) + 
+  geom_boxplot(outlier.shape = NA) +
+  labs(title="Number of Partners when First started Drinking")
+```
+```{r}
+# select numeric variables
+df <- dplyr::select_if(newdata, is.numeric)
+
+# calulate the correlations
+r <- cor(df, use="complete.obs")
+round(r,2)
+```
+
+
+```{r}
+data$fight1 <- recode(data$fight, '0' = 1, '1' = 0)
+data$suicide1 <- recode(data$suicide, '0' = 1, '1' = 0)
+
+table(data$fight1,data$Age_Alc)
+table(data$suicide1,data$Age_Alc)
+```
+
+## Including Plots
+
+```{r}
+summary(data)
+data$sex <- as.factor(data$sex)
+data$race <- as.factor(data$race)
+data$suicide <- as.factor(data$suicide)
+data$fight <- as.factor(data$fight)
+data$Age_Alc <- as.numeric(data$Age_Alc)
+```
+
+
+You can also embed plots, for example:
+
+
+
+```{r}
+mod<-glm(formula = fight1 ~ Age_Weed + Age_Alc + age_sex + race , family = "binomial", data = data)
+summary(mod)
+```
+
+
+```{r}
+mod2<-glm(formula = suicide ~ Age_Weed + Age_Alc + age_sex + Hrs_Sleep, family = "binomial", data = data)
+summary(mod2)
+```
+
+```{r}
+```
+```{r}
+data$race <- as.factor(data$race)
+lm <- lm(Hrs_Sleep ~  Age_Alc + Age_Weed + age_sex + race, data=data)
+summary(lm)
+xkabledply(lm, title = paste("Model :", format(formula(lm)) ) )
+xkablevif(lm)
+```
+
+```{r}
+lm1 <- lm(multiple_partners ~  Age_Alc + Age_Weed + age_sex + race, data=data)
+summary(lm1)
+xkabledply(lm1, title = paste("Model :", format(formula(lm1)) ) )
+```
+
+```{r}
+lm2 <- lm(physical_activity ~  Age_Alc + Age_Weed + age_sex + race, data=data)
+summary(lm2)
+xkabledply(lm2, title = paste("Model :", format(formula(lm1)) ) )
+```
