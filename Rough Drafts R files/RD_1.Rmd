@@ -8,7 +8,7 @@ date: "2022-12-04"
 knitr::opts_chunk$set(echo = TRUE)
 library(ezids)
 library(ggplot2)
-library(plyr)
+library(dplyr)
 library(corrplot)
 ```
 
@@ -22,6 +22,7 @@ dataset = read.csv("../sadc_df.csv")
 # select variables v1, v2, v3
 myvars <- c("Age_Alc", "Age_Weed","multiple_partners","physical_activity","Hrs_Sleep","age_sex","race","gender","fight","suicide")
 data <- dataset[myvars]
+data <- data[data$age_sex != 0,]
 ```
 
 ```{r}
@@ -39,9 +40,9 @@ ggplot(data, aes(x=Age_Alc, y=multiple_partners)) +
 ```
 ```{r}
 # select numeric variables
-df <- dplyr::select_if(newdata, is.numeric)
+df <- dplyr::select_if(data, is.numeric)
 
-# calulate the correlations
+# calculate the correlations
 r <- cor(df, use="complete.obs")
 round(r,2)
 ```
@@ -51,15 +52,13 @@ round(r,2)
 data$fight1 <- recode(data$fight, '0' = 1, '1' = 0)
 data$suicide1 <- recode(data$suicide, '0' = 1, '1' = 0)
 
-table(data$fight1,data$Age_Alc)
-table(data$suicide1,data$Age_Alc)
 ```
 
 ## Including Plots
 
 ```{r}
 summary(data)
-data$sex <- as.factor(data$sex)
+data$gender <- as.factor(data$gender)
 data$race <- as.factor(data$race)
 data$suicide <- as.factor(data$suicide)
 data$fight <- as.factor(data$fight)
@@ -74,6 +73,7 @@ You can also embed plots, for example:
 ```{r}
 mod<-glm(formula = fight1 ~ Age_Weed + Age_Alc + age_sex + race , family = "binomial", data = data)
 summary(mod)
+plot(mod)
 ```
 
 
@@ -83,9 +83,6 @@ summary(mod2)
 ```
 
 ```{r}
-```
-```{r}
-data$race <- as.factor(data$race)
 lm <- lm(Hrs_Sleep ~  Age_Alc + Age_Weed + age_sex + race, data=data)
 summary(lm)
 xkabledply(lm, title = paste("Model :", format(formula(lm)) ) )
