@@ -14,7 +14,7 @@ library(corrplot)
 library(readr)
 library(caret)
 
-gss_0 <- data.frame(read.csv("GSS_5.csv"))
+gss_0 <- data.frame(read.csv("../GSS_5.csv"))
 
 gss_0 = subset(gss_0, select = -c(id_))
 
@@ -54,48 +54,8 @@ str(gss_5)
 corrplot(cor(gss_5[ , -c(4, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17)]), method = 'number', type = 'lower', tl.cex = 0.8, number.cex = 0.6)
 ```
 
-## ques3 - logistic - Ordinal Logistic regression https://statisticsbyjim.com/regression/choosing-regression-analysis/
-
-```{r}
-# incorrect
-ques3_1 <- glm(hapmar ~ educ + speduc + hrs1 + sphrs1 + childs + hompop + year + earnrs + happy + hapmar + satjob + satfin, data = gss_5, binomial(link = "logit"))
-
-summary(ques3_1)
-
-```
-
-https://towardsdatascience.com/implementing-and-interpreting-ordinal-logistic-regression-1ee699274cf5
-
-```{r}
-# correct
-library(MASS)
-
-ques3_2 <- polr(hapmar ~ educ + speduc + hrs1 + sphrs1 + childs + hompop + year + earnrs + happy + hapmar + satjob + satfin, data = gss_5, Hess = TRUE)
-
-summary(ques3_2)
-
-```
-https://peopleanalytics-regression-book.org/ord-reg.html
-
-```{r}
-
-summary_table <- coef(summary(ques3_2))
-pval <- pnorm(abs(summary_table[, "t value"]),lower.tail = FALSE)* 2
-summary_table <- cbind(summary_table, "p value" = round(pval,3))
-summary_table
-
-```
 
 ## Ques 1 Linear Regression / Anova test
-
-```{r}
-
-lm_1 <- lm(hrs1 ~ year + sphrs1 + educ + speduc + hompop, data = gss_5)
-
-summary(lm_1)
-
-```
-
 
 ```{r}
 
@@ -112,6 +72,17 @@ ques_1_manova <- manova(cbind(degree, spdeg, income, rincome, hapmar, satjob, sa
 summary.aov(ques_1_manova)
 
 ```
+
+```{r}
+
+lm_1 <- lm(hrs1 ~ year + sphrs1 + educ + speduc + hompop, data = gss_5)
+#why not use all vars from manova
+summary(lm_1)
+
+```
+
+
+
 
 ## Ques 2
 
@@ -132,21 +103,86 @@ summary.aov(ques_2_manova)
 ```
 
 
-## Ques 4
+## ques3 - logistic - Ordinal Logistic regression https://statisticsbyjim.com/regression/choosing-regression-analysis/
+
+# ```{r}
+# # incorrect
+# ques3_1 <- glm(hapmar ~ educ + speduc + hrs1 + sphrs1 + childs + hompop + year + earnrs + happy + hapmar + satjob + satfin, data = gss_5, binomial(link = "logit"))
+# 
+# summary(ques3_1)
+# 
+# ```
+
+## Ques 3  Ordinal Logistic Regression
+https://towardsdatascience.com/implementing-and-interpreting-ordinal-logistic-regression-1ee699274cf5
 
 ```{r}
 
-ques4_2 <- polr(childs ~ educ + speduc + hrs1 + sphrs1 + degree + spdeg + hompop + year + earnrs + income + rincome + happy + hapmar + class_ + satjob + satfin, data = gss_5, Hess = TRUE)
+set.seed(927)
+sample <- sample(c(TRUE, FALSE), nrow(gss_5), replace=TRUE, prob=c(0.8,0.2))
+traingss_5  <- gss_5[sample, ]
+testgss_5   <- gss_5[!sample, ]
 
-summary(ques4_2)
+
+```
+```{r}
+# correct
+library(MASS)
+
+ques3<- polr(hapmar ~ speduc + childs + hompop + year + earnrs + happy + satjob + satfin, data = traingss_5, Hess = TRUE)
+
+predictions <- predict(object = ques3, newdata = testgss_5, type = "class")
+
+#####confusionMatrix(predictions, testgss_5)
+
+#summary(ques3)
+
+```
+https://peopleanalytics-regression-book.org/ord-reg.html
+
+```{r}
+
+summary_table <- coef(summary(ques3))
+pval <- pnorm(abs(summary_table[, "t value"]),lower.tail = FALSE)* 2
+summary_table <- cbind(summary_table, "p value" = round(pval,5))
+summary_table
+
+```
+
+
+## Ques 4
+
+```{r}
+#choose vars that have lowest p val and the ones that would logically make sense
+
+ques4 <- polr(childs ~ educ + speduc + hrs1 + sphrs1 + degree + spdeg + hompop+ year + earnrs + income + rincome + happy + hapmar + class_ + satjob + satfin, data = gss_5, Hess = TRUE)
+
+summary(ques4)
 
 ```
 
 ```{r}
 
-summary_table <- coef(summary(ques4_2))
+summary_table <- coef(summary(ques4))
 pval <- pnorm(abs(summary_table[, "t value"]),lower.tail = FALSE)* 2
 summary_table <- cbind(summary_table, "p value" = round(pval,3))
 summary_table
 
+```
+
+## Ques 5
+
+```{r}
+ques5 <- polr(income ~ educ + speduc + hrs1 + sphrs1 + degree + spdeg + year + earnrs + childs + rincome + happy + hapmar + class_ + satjob + satfin, data = gss_5, Hess = TRUE)
+
+#summary(ques5)
+
+```
+
+```{r}
+
+summary_table <- coef(summary(ques5))
+pval <- pnorm(abs(summary_table[, "t value"]),lower.tail = FALSE)* 2
+summary_table <- cbind(summary_table, "p value" = round(pval,3))
+summary_table
 ```

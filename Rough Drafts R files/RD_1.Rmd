@@ -18,7 +18,7 @@ library(corrplot)
 
 
 ```{r cars}
-dataset = read.csv("/Users/carriemagee/Downloads/sadc_df.csv")
+dataset = read.csv("../sadc_df.csv")
 # select variables v1, v2, v3
 myvars <- c("Age_Alc", "Age_Weed","multiple_partners","physical_activity","Hrs_Sleep","age_sex","race","gender","fight","suicide")
 data <- dataset[myvars]
