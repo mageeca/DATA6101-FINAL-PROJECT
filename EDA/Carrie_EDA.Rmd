@@ -1,0 +1,133 @@
+---
+title: "Carrie -- EDA"
+output: html_document
+date: "2022-12-05"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE )
+library(ezids)
+library(ggplot2)
+library(dplyr)
+library(corrplot) 
+```
+
+
+```{r}
+dataset = read.csv("/Users/carriemagee/Downloads/sadc_df.csv")
+myvars <- c("Age_Alc", "Age_Weed","multiple_partners","physical_activity","Hrs_Sleep","age_sex","race","sex","fight","suicide")
+data <- dataset[myvars]
+data <- data[data$age_sex != 0,] 
+```
+
+```{r}
+data$fight <- recode(data$fight, '0' = 'yes', '1' = 'no')
+data$suicide <- recode(data$suicide, '0' = 'yes', '1' = 'no')
+
+no_suicide <- subset(data,suicide == 'no')
+yes_suicide <- subset(data,suicide == 'yes')
+
+no_fight<- subset(data,fight == 'no')
+yes_fight <- subset(data,fight == 'yes')
+```
+
+```{r}
+#looking at age started drinking and if ever engaged in a physical fight 
+ggplot(na.omit(data), aes(x=Age_Alc))+
+  geom_bar(fill="forest green")+
+  facet_wrap(~fight) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Engaging in a Physical Fight by Age when Individual Started Drinking") + xlab("Age")+ ylab("Frequency ")+ theme(plot.title = element_text(face="bold",hjust = 0.5))
+```
+
+The figure above shows that individuals who started drinking later in adolescence (around age 11 and 12) had never engaged in a physical fight. In comparison, individuals who started drinking earlier in adolescence (between ages 9 and 10) reported engaging in a physical fight at one point in their life. The overall trends show that more individuals who drank during adolescence have gotten into a physical fight. 
+
+```{r}
+#looking at age started drinking and if ever had suicidal thoughts
+ggplot(na.omit(data), aes(x=Age_Alc))+
+  geom_bar(fill="forest green")+
+  facet_wrap(~suicide) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Thoughts of Suicide by Age when Individual Started Drinking") +  xlab("Age")+ ylab("Frequency") + theme(plot.title = element_text(face="bold",hjust = 0.5))
+```
+
+The results show that a majority of the youth have not had thoughts of committing suicide. The drinking age ranges for individuals who reported never having suicidal thoughts are more spread out with a majority reporting their first drinking experience being around ages 10 to 13. Contrastingly, individuals who reported having thoughts of suicide cluster around age 10 which may show a potential relationship between starting drinking earlier in adolescence and having future suicidal thoughts.  
+
+```{r}
+ttest2sample_alc = t.test(no_suicide$Age_Alc,yes_suicide$Age_Alc)
+ttest2sample_alc
+
+ttest2sample_alc1 = t.test(no_fight$Age_Alc,yes_fight$Age_Alc)
+ttest2sample_alc1
+```
+
+The results of the two sample t-test looking at the difference in average ages between individuals who have and have not had thoughts about committing suicide show that there is a significant difference in the average ages of each group. The p-value = 0.00 which means that we can  accept the alternative hypothesis that there is a difference between suicidal and non-suicidal adolescents for the average age that they started drinking alcohol. The results also estimate the mean starting drinking age for non-suicidal individuals is about 11 years old while the estimated mean age for suicidal adolescents is around 10 years old when they started drinking. 
+
+Similarly, the results of the two-sample t-test looking at the difference in average ages between individuals who have and have not gotten into a physical fight show that there is a significant difference in the average ages of each group. The p-value = 0.00 which means that we can accept the alternative hypothesis that there is a difference in average starting drinking ages between individuals who have and have not engaged in a physical fight. The resuls also estimate the mean starting drinking age for those who have engaged in a fight to be around 10 years old and around 11 years old for those who have not engaged in a physical fight. 
+
+Overall, the results appear to show that the average starting age of drinking may be related to whether adolescents have had suicidal thoughts and have ever gotten into a physical fight. More specifically, it may be that the earlier adolescents start drinking the more likely they are to engage in these behaviors compared to adolescents who start drinking later in their life.  
+
+
+
+
+```{r}
+#looking at age started smoking marijuana and ever engage in a physical fight
+ggplot(na.omit(data), aes(x=Age_Weed))+
+  geom_bar(fill="forest green")+
+  facet_wrap(~fight) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Engaging in a Physical Fight by Age Individual Started Smoking Marijuana") + xlab("Age")+ ylab("Frequency ")+ theme(plot.title = element_text(face="bold",hjust = 0.5))
+```
+
+The results of the figure above shows that individuals who have never gotten into a physical fight started smoking marijuana later in adolescence around age 11 and 12 while a majority of individuals who have gotten into a physical fight started smoking marijuana earlier in adolescence around ages 9 to 11. 
+
+```{r}
+#looking at age started smoking marijuana and suicidal thoughts
+ggplot(na.omit(data), aes(x=Age_Weed))+
+  geom_bar(fill="forest green")+
+  facet_wrap(~suicide) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Thoughts of Suicide by Age Individual Started Smoking Marijuana") + xlab("Age")+ ylab("Frequency ")+ theme(plot.title = element_text(face="bold",hjust = 0.5))
+```
+The results show that a majority of individuals have not had suicidal thoughts and the ages they started smoking marijuana ranges between 10 and 13. Interestingly, for the small majority of individuals who did report having thoughts of commiting suicide started smoking marijuana around age 9. This may reveal a potential relationship between smoking marijuana really early in adolescence and the consequences it may have on their mental health in terms of having suicidal thoughts. 
+
+```{r }
+ttest2sample_weed = t.test(no_suicide$Age_Weed,yes_suicide$Age_Weed)
+ttest2sample_weed
+
+ttest2sample_weed1 = t.test(no_fight$Age_Weed,yes_fight$Age_Weed)
+ttest2sample_weed1
+```
+
+The results of the two sample t-test looking at the difference in average ages between individuals who have and have not had thoughts about committing suicide show that there is a significant difference in the average ages of each group. The p-value = 0.00 which means that we can  accept the alternative hypothesis that there is a difference between suicidal and non-suicidal adolescents for the average age that they started smoking marijuana. The results also estimate the mean starting smoking age for non-suicidal individuals is about 11 years old while the estimated mean age for suicidal adolescents is around 10 years old for when they started smoking marijuana. 
+
+Similarly, the results of the two-sample t-test looking at the difference in average ages between individuals who have and have not gotten into a physical fight show that there is a significant difference in the average starting smoking ages of each group. The p-value = 0.00 which means that we can accept the alternative hypothesis that there is a difference in average starting smoking ages between individuals who have and have not engaged in a physical fight. The results also estimate the mean starting smoking age for those who have engaged in a fight to be around 10 years old and around 11 years old for those who have not engaged in a physical fight. 
+
+Overall, the results appear to show that the average starting age of smoking marijuana may be related to whether adolescents have had suicidal thoughts and/or have ever gotten into a physical fight. More specifically, it may be that the earlier adolescents start marijuana the more likely they may be to engage in these behaviors compared to adolescents who start smoking marijuana later in their life.  
+
+```{r}
+#looking at age started drinking and if ever engaged in a physical fight 
+ggplot(na.omit(data), aes(x=age_sex))+
+  geom_bar(fill="forest green")+
+  facet_wrap(~fight) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Engaging in a Physical Fight by Age when Individual Started Having Romantic Relationships") + xlab("Age")+ ylab("Frequency ")+ theme(plot.title = element_text(face="bold",hjust = 0.5))
+```
+
+The results show that individuals who have not engaged in a physical fight reported having romantic relationships between ages 12 and 13 while individuals who have engaged in a physical fight reported having romantic relationships around 10 and 11 years old. These results may show that the later an individual starts having romantic relationships, the less likely they may be to get into physical fights and vice versa. 
+
+```{r}
+#looking at age started drinking and if ever had suicidal thoughts
+ggplot(na.omit(data), aes(x=age_sex))+
+  geom_bar(fill="forest green")+
+  facet_wrap(~suicide)  + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Thoughts of Suicide by Age when Individual Started Having Sex") + xlab("Age")+ ylab("Frequency ")+ theme(plot.title = element_text(face="bold",hjust = 0.5))
+```
+
+The results above show that a majority of individuals who did not report having suicidal thoughts started having romantic relationships between ages 11 and 13 while a majority of individuals who did report having suicidal thoughts started having romantic relationships around age 10. The results may provide insight into how engaging in romantic relationships earlier in adolescence may lead to future suicidal thoughts for youth. 
+
+
+```{r}
+ttest2sample_sex = t.test(no_suicide$age_sex,yes_suicide$age_sex)
+ttest2sample_sex
+
+ttest2sample_sex1 = t.test(no_fight$age_sex,yes_fight$age_sex)
+ttest2sample_sex1
+```
+
+
+The results of the two sample t-test looking at the difference in average ages between individuals who have and have not had thoughts about committing suicide show that there is a significant difference in the average ages of each group. The p-value = 0.00 which means that we can  accept the alternative hypothesis that there is a difference between suicidal and non-suicidal adolescents for the average age that they started having romantic relationships. The results also estimate the mean age for first romantic relationships for non-suicidal individuals is about 11 years old while the estimated mean age for suicidal adolescents is around 10 years old for when they started having romantic interests.
+
+Similarly, the results of the two-sample t-test looking at the difference in average ages between individuals who have and have not gotten into a physical fight show that there is a significant difference in the average ages of when they had their first romantic interests. The p-value = 0.00 which means that we can accept the alternative hypothesis that there is a difference in average starting smoking ages between individuals who have and have not engaged in a physical fight. 
+
+Overall, the results appear to show that the average starting age of romantic relationships may be related to whether adolescents have suicidal thoughts and/or have ever gotten into a physical fight. More specifically, it may be that the earlier adolescents start having romantic relationships the more likely they may be to engage in these behaviors compared to adolescents who have romantic interests later in their life.
+
