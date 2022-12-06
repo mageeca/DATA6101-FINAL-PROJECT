@@ -211,4 +211,10 @@ Since the p-value of 0.000 is less than the significance level of 0.05, we rejec
 race_vs_physicalactivity <- aov(physical_activity ~ race, data =data )
 xkabledply(race_vs_physicalactivity)
 ```
-Since the p-value of 0.000 is less than the significance level of 0.05, we rejects the null hypothesis that there is NO difference in the average days of physical activity BETWEEN RACES .
+Since the p-value of 0.000 is less than the significance level of 0.05, we rejects the null hypothesis that there is NO difference in the average days of physical activity between races.
+
+```{r}
+race_vs_HrsOfSleep <- aov(Hrs_Sleep ~ race, data = data)
+xkabledply(race_vs_HrsOfSleep)
+```
+Since the p-value of 0.000 is less than the significance level of 0.05, we rejects the null hypothesis that there is NO difference in the average hour of sleeps of different individuals between races.
