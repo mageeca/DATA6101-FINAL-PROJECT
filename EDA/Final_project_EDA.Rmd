@@ -243,6 +243,7 @@ agg_df <- aggregate(data$Hrs_Sleep, by=list(data$race), FUN=mean)
 agg_df
 
 ```
+The average  hour of sleep by white race is 6.32 hours which is highest among the all the races whereas the average hour of sleep by Hispanic/Latino and Black or African American are 6.26 and 5.516 hours. All other Races sleep 6.11 average hour of sleep.
 
 
 ```{r}
@@ -250,28 +251,38 @@ agg_df <- aggregate(data$physical_activity, by=list(data$race), FUN=mean)
 agg_df
 ```
 
+The average days of physical activity between white races is 3.87 whereas the average days of physical activity between Hispanic/Latino, Black or African American and All Other Races 
+are 5.776, 6.032 and 3.90.
+
 ```{r}
 agg_df <- aggregate(data$multiple_partners, by=list(data$race), FUN=mean)
 agg_df
 ```
+The average number of romantic partners by white races has had is 2.83 whereas the average numbers of romantic partner by Hispanic/Latino, Black or African American and All Other Races has had are 2.64, 5.233 and 2.707 respectively.
 
 ```{r}
 agg_df <- aggregate(data$Age_Weed, by=list(data$race), FUN=mean)
 agg_df
 ```
+The average age of white people when started smoking marijuana is 11.50 whereas the average age of Hispanic/Latino, Black or African American and All Other Races when they started smoking marijuana are 11.51, 9.68 and 11.51 respectively.
 
 ```{r}
 agg_df <- aggregate(data$age_sex, by=list(data$race), FUN=mean)
 agg_df
 ```
+The average age of white people when having sex is 11.41 whereas the average age of Hispanic/Latino, Black or African American and All Other Races when they started having sex are 11.60,10.30 and 10.95 respectively.
 
 ```{r}
-agg_df <- aggregate(data$gender, by=list(data$race), FUN=mean)
-agg_df
+# agg_df <- aggregate(data$gender, by=list(data$race), FUN=mean)
+# agg_df
 
 ```
+
+
 
 ```{r}
 agg_df <- aggregate(data$Age_Alc, by=list(data$race), FUN=mean)
 agg_df
 ```
+
+The average age of white people when they started drinking alcohol is 11.11 whereas the average age of Hispanic/Latino, Black or African American and All Other Races  when they started drinking alcohol are 11.15,10.09 and 11.28 respectively.
