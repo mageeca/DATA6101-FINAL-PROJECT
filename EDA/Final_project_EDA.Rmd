@@ -186,6 +186,9 @@ ggplot(race_vs_physicalactivity, aes(fill=physical_activity, y=total_count, x=ph
     xlab("")
 ```
 
+```{r}
+data$race <- as.factor(data$race)
+```
 
 ```{r}
 data$race <- recode(data$race, '1' = 'White', '2' = 'Black or African American', '3'= 'Hispanic/Latino', '4'='All Other Races')
