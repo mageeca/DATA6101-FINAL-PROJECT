@@ -4,6 +4,16 @@ output: html_document
 date: "2022-12-05"
 ---
 
+Adolescence is a crucial life period marked by many different physical, emotional social, academic, and interpersonal changes. The attitudes and  behaviors that are developed in adolescence tend to influence the trajectory of our lives into young adulthood and beyond which makes it such a compelling area of research. With data collected from the CDC’s Youth Risk Behavior Surveillance System (YRBSS), our project explores the questions “Does the age at which adolescents start engaging in "risky" behaviors predict their interpersonal, physical, and mental well-being? Furthermore, how does race influence interpersonal, physical, and mental well-being?”
+
+We conceptualized and measured risky behaviors using the age when individuals started drinking alcohol, smoking marijuana, and having romantic relationships. Considering the objective of the project to explore risky behaviors in early adolescence, we discarded any responses that reported never engaging in any risky behaviors. The resulting ages ranged between 8 years and 13 years old.
+
+Interpersonal, physical, and mental well-being were explored using amount of  physical activity, hours of sleep per night, number of sexual partners, thoughts of suicide, and whether or not individuals have ever engaged in a fight with another person. More specifically, physical activity was measured with the question “During the past 7 days, on how many days were you physically active for a total of at least 60 minutes per day?” with responses ranging from 0 to 7 days. Sexual partners was measured by asking “With how many people have you ever had sexual intercourse?” with answers ranging from 1 to 6 people. For hours of the sleep, the question stated “On an average school night, how many hours of sleep do you get?” and answers ranged from 4 hours to 10 hours. Lastly, suicidal thoughts and fighting were binary coded (yes/no) and asked “Have you ever seriously thought about killing yourself?” and “Have you ever been in a physical fight?” 
+
+Through our analysis, we hope to understand how engaging in risky behaviors either earlier or later in adolescence may predict future interpersonal, physical, and mental well-being for youth. We hope to expand understanding about how risky behaviors can impact the way in which youth function in the various realms of everyday life and uncover any patterns that can lead to future prevent efforts for adolescents. 
+
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE )
 library(ezids)
@@ -17,7 +27,7 @@ library(tidyr)
 
 
 ```{r}
-dataset = read.csv("/Users/carriemagee/Downloads/sadc_df.csv")
+dataset = read.csv("sadc_df.csv")
 myvars <- c("Age_Alc", "Age_Weed","multiple_partners","physical_activity","Hrs_Sleep","age_sex","race","sex","fight","suicide")
 data <- dataset[myvars]
 data <- data[data$age_sex != 0,] 
@@ -34,6 +44,269 @@ yes_suicide <- subset(data,suicide == 'yes')
 no_fight<- subset(data,fight == 'no')
 yes_fight <- subset(data,fight == 'yes')
 ```
+
+
+```{r}
+# Age when they started drinking
+
+data_age_alc <- data %>% 
+              group_by(Age_Alc) %>% 
+              summarise(total_count = n(), .groups = "drop") %>% 
+              as.data.frame()
+
+str(data_age_alc)
+
+# Plot the bar chart 
+ggplot(data_age_alc, aes(x = Age_Alc, y = total_count)) + 
+  geom_bar(stat = "identity")
+
+```
+
+This bar graph illustrates the count of respondents who had their first drink for age from 8 to 13 <correct english abit>. We observe that most respondents started drinking when they were 10 and 12. There are around 500 people who started drink at age 8 and the number increases with 500 as the age increases to 11. Overall we can see that there is an upward trend till age 11 followed by a decline till age 13. 
+
+
+```{r}
+# Age when they started smoking
+
+data_age_weed <- data %>% 
+              group_by(Age_Weed) %>% 
+              summarise(total_count = n(), .groups = 'drop') %>% 
+              as.data.frame()
+
+str(data_age_weed)
+
+# Plot the bar chart 
+ggplot(data_age_weed, aes(x = Age_Weed, y = total_count)) + 
+  geom_bar(stat = "identity")
+
+```
+
+This bar graph illustrates the count of respondents who smoked weed for the fisr time for age from 8 to 13 <correct english abit>. We observe that few respondents started smoking weed as early as at 8 years. There are more people who starter smokign ar age 9 (almost 1500) than at age 11 (almost 1000). There are around 1750 respondents whi had their first smoke at age 11 and 12.  
+
+
+```{r}
+# Age when the had sex
+data_age_sex <- data %>% 
+              group_by(age_sex) %>% 
+              summarise(total_count = n(), .groups = 'drop') %>% 
+              as.data.frame()
+
+str(data_age_sex)
+
+# Plot the bar chart 
+ggplot(data_age_sex, aes(x = age_sex, y = total_count)) + 
+  geom_bar(stat = "identity")
+
+```
+
+From the graph above we see that most respondents had their first sexual experience at ages 10, 11 and 13. There are barely 750 respondets whi had their first experience before the age of 10. There is a huge increase in numbers when we go from age 9 to age 10.
+
+```{r}
+# Multiple partners
+data_age_partner <- data %>% 
+              group_by(multiple_partners) %>% 
+              summarise(total_count = n(), .groups = 'drop') %>% 
+              as.data.frame()
+
+str(data_age_partner)
+
+# Plot the bar chart 
+ggplot(data_age_partner, aes(x = multiple_partners, y = total_count)) + 
+  geom_bar(stat = "identity")
+
+```
+
+We observe that most respondents have 1 partner followed by 6, 3, 2, 1 and 4. Majority of the respondents have either 1 or 6 partners. 
+
+```{r}
+# Physical Activity
+data_physical_activity <- data %>% 
+              group_by(physical_activity) %>% 
+              summarise(total_count = n(), .groups = 'drop') %>% 
+              as.data.frame()
+
+str(data_physical_activity)
+
+# Plot the bar chart 
+ggplot(data_physical_activity, aes(x = physical_activity, y = total_count)) + 
+  geom_bar(stat = "identity")
+
+```
+
+Most respondents(over 4000) exercise 7 days a week.
+
+```{r}
+data_grouped_2a <- data %>% 
+              group_by(sex, multiple_partners) %>% 
+              summarise(total_count1 = n(), .groups = 'drop') %>% 
+              as.data.frame()
+
+ggplot(data_grouped_2a, aes(fill=multiple_partners, y=total_count1, x=multiple_partners)) + 
+    geom_bar(position="dodge", stat="identity") +
+    ggtitle("Studying ") +
+    facet_wrap(~sex) +
+    theme(legend.position="none") +
+    xlab("")
+
+```
+On observing the bar plot for multiple partners for both genders, we can say that overall males have more partners than females. There are more number of males who have 6 partners. But there are more number of females whi have 5 partners. There is a huge gap in most of the bar graphs  because there are 3 times more males than females.
+
+```{r}
+data_grouped_2b <- data %>% 
+              group_by(sex, Age_Weed) %>% 
+              summarise(total_count2 = n(), .groups = 'drop') %>% 
+              as.data.frame()
+
+ggplot(data_grouped_2b, aes(fill=Age_Weed, y=total_count2, x=Age_Weed)) + 
+    geom_bar(position="dodge", stat="identity") +
+    ggtitle("Studying ") +
+    facet_wrap(~sex) +
+    theme(legend.position="none") +
+    xlab("")
+
+```
+
+Most males first smoked weed at the age of 8, 11, 12 and 13 while most females first smoked weed at 10, 11 and 12. 
+
+```{r}
+data_grouped_2c <- data %>% 
+              group_by(sex, Age_Alc) %>% 
+              summarise(total_count3 = n(), .groups = 'drop') %>% 
+              as.data.frame()
+
+ggplot(data_grouped_2c, aes(fill=Age_Alc, y=total_count3, x=Age_Alc)) + 
+    geom_bar(position="dodge", stat="identity") +
+    ggtitle("Studying ") +
+    facet_wrap(~sex) +
+    theme(legend.position="none") +
+    xlab("")
+
+```
+
+Most males had their first alcohol at ages 10, 11, 12 and 13. There is an increasing trend till age 11 and a declining trend after that. For females most had their first drink at ages 9, 11 and 12. 
+
+```{r}
+
+data_grouped_3a <- data %>% 
+              group_by(race, multiple_partners) %>% 
+              summarise(total_count1 = n(), .groups = 'drop') %>% 
+              as.data.frame()
+
+ggplot(data_grouped_3a, aes(fill=multiple_partners, y=total_count1, x=multiple_partners)) + 
+    geom_bar(position="dodge", stat="identity") +
+    ggtitle("Studying ") +
+    facet_wrap(~race) +
+    theme(legend.position="none") +
+    xlab("")
+
+```
+On comparing multiple partners for different ethnic groups, we observe that majorly there is a decreasing trend. Number of people with multiple partners decrease as the number of partners increase. For ethnic group 2 we observe that most people have 6 multiple partners while similar number of people have 1 to 5 partners. Most people of ethnic group 3 have 1, 3 or 5 partners as opposed. Similar to ethnic group 1, group 3 also has a decreasing trend. Number of people with multiple partners decrease as the number of partners increase.
+
+```{r}
+
+data_grouped_3b <- data %>% 
+              group_by(race, Age_Weed) %>% 
+              summarise(total_count2 = n(), .groups = 'drop') %>% 
+              as.data.frame()
+
+ggplot(data_grouped_3b, aes(fill=Age_Weed, y=total_count2, x=Age_Weed)) + 
+    geom_bar(position="dodge", stat="identity") +
+    ggtitle("Studying ") +
+    facet_wrap(~race) +
+    theme(legend.position="none") +
+    xlab("")
+
+```
+Most respondents belonging to ethnic group 1 smoked weed for the first time at age 11 and 12. There is an increasing trend form 8 to 12. For ethnic group 2, we observe that most experienced weed at age 9. For ethnic group 3, most of the respondents were atleast 10 years old. Most Respondents from ethnic group 4 were also atleast 10 years old when they smoked weed for the first time. 
+
+```{r}
+data_grouped_3c <- data %>% 
+              group_by(race, Age_Alc) %>% 
+              summarise(total_count3 = n(), .groups = 'drop') %>% 
+              as.data.frame()
+
+ggplot(data_grouped_3c, aes(fill=Age_Alc, y=total_count3, x=Age_Alc)) + 
+    geom_bar(position="dodge", stat="identity") +
+    ggtitle("Studying ") +
+    facet_wrap(~race) +
+    theme(legend.position="none") +
+    xlab("")
+
+```
+
+Most Respondents from Ethnic group 1 had alcohol for the first time when they were atleast 11 years old. Less than 500 of them had alcohol before the age of 11. At age 10, the respondents from ethnic group 2 had alcohol. For Ethnic group 3, most of them had alcohol at age of atleast 11 years. There are few (around 560) who had alcohol at age 9. For group 4, there is an increasing trend ie as the age increases respondents who have experienced alcohol also increased.
+ 
+```{r}
+data_grouped_4a <- data %>% 
+              group_by(sex, suicide) %>% 
+              summarise(total_count1 = n(), .groups = 'drop') %>% 
+              as.data.frame()
+
+ggplot(data_grouped_4a, aes(fill=suicide, y=total_count1, x=suicide)) + 
+    geom_bar(position="dodge", stat="identity") +
+    ggtitle("Studying ") +
+    facet_wrap(~sex) +
+    theme(legend.position="none") +
+    xlab("")
+
+```
+
+Overall more males have had suicidal thoughts than females. Around 40% of the males have had suicidal thoughts while only 6% of the females have had suicidal thoughts. 
+
+```{r}
+data_grouped_4b <- data %>% 
+              group_by(race, suicide) %>% 
+              summarise(total_count2 = n(), .groups = 'drop') %>% 
+              as.data.frame()
+
+ggplot(data_grouped_4b, aes(fill=suicide, y=total_count2, x=suicide)) + 
+    geom_bar(position="dodge", stat="identity") +
+    ggtitle("Studying ") +
+    facet_wrap(~race) +
+    theme(legend.position="none") +
+    xlab("")
+
+```
+
+About 10 Percent (1 in 10 people) of respondents belonging to  ethnic group 1 have had suicidal thoughts. This is not the case with respondents belonging to ethnic group 2. Most of the respondents(about 75%) have had suicidal thoughts. We can say that every 5th person ethnic groups 3 and 4 have had suicidal thoughts.
+
+
+```{r}
+data_grouped_5a <- data %>% 
+              group_by(sex, fight) %>% 
+              summarise(total_count1 = n(), .groups = 'drop') %>% 
+              as.data.frame()
+
+ggplot(data_grouped_5a, aes(fill=fight, y=total_count1, x=fight)) + 
+    geom_bar(position="dodge", stat="identity") +
+    ggtitle("Studying ") +
+    facet_wrap(~sex) +
+    theme(legend.position="none") +
+    xlab("")
+
+```
+
+Most of the males and females haev been in a fight. There is a higher percentage of females who have been in a fight than men. 
+
+
+```{r}
+
+data_grouped_5b <- data %>% 
+              group_by(race, fight) %>% 
+              summarise(total_count2 = n(), .groups = 'drop') %>% 
+              as.data.frame()
+
+ggplot(data_grouped_5b, aes(fill=fight, y=total_count2, x=fight)) + 
+    geom_bar(position="dodge", stat="identity") +
+    ggtitle("Studying ") +
+    facet_wrap(~race) +
+    theme(legend.position="none") +
+    xlab("")
+
+```
+
+Most respondents belonging to ethnic group 1 and 4 have not been in fights while most respondents from ethnic group 2 and 3have been in a fight. 
+
 
 ```{r}
 #looking at age started drinking and if ever engaged in a physical fight 
