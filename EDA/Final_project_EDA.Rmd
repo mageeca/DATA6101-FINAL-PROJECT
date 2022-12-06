@@ -286,3 +286,7 @@ agg_df
 ```
 
 The average age of white people when they started drinking alcohol is 11.11 whereas the average age of Hispanic/Latino, Black or African American and All Other Races  when they started drinking alcohol are 11.15,10.09 and 11.28 respectively.
+
+```{r}
+cor(data[, c("Age_Alc", "Age_Weed","multiple_partners","physical_activity","Hrs_Sleep","age_sex")])
+```
