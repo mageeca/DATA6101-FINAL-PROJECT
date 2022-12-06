@@ -191,13 +191,13 @@ data$race <- as.factor(data$race)
 ```
 
 ```{r}
-data$race <- recode(data$race, '1' = 'White', '2' = 'Black or African American', '3'= 'Hispanic/Latino', '4'='All Other Races')
-
-
-race1 <- subset(data,race == 'White')
-race2 <- subset(data,race == 'Black or African American')
-race3 <- subset(data,race == 'Hispanic/Latino')
-race4 <- subset(data,race == 'All Other Races')
+# data$race <- recode(data$race, '1' = 'White', '2' = 'Black or African American', '3'= 'Hispanic/Latino', '4'='All Other Races')
+# 
+# 
+# race1 <- subset(data,race == 'White')
+# race2 <- subset(data,race == 'Black or African American')
+# race3 <- subset(data,race == 'Hispanic/Latino')
+# race4 <- subset(data,race == 'All Other Races') 
 ```
 
 
