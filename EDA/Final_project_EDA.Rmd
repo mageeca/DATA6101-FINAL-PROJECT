@@ -205,8 +205,10 @@ data$race <- as.factor(data$race)
 race_vs_multipartners <- aov(multiple_partners ~ race, data =data )
 xkabledply(race_vs_multipartners)
 ```
+Since the p-value of 0.000 is less than the significance level of 0.05, we rejects the null hypothesis that there is NO difference in the average number of romantic partners an individual has had between races.
 
 ```{r}
 race_vs_physicalactivity <- aov(physical_activity ~ race, data =data )
 xkabledply(race_vs_physicalactivity)
 ```
+Since the p-value of 0.000 is less than the significance level of 0.05, we rejects the null hypothesis that there is NO difference in the average days of physical activity BETWEEN RACES .
