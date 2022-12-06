@@ -218,3 +218,60 @@ race_vs_HrsOfSleep <- aov(Hrs_Sleep ~ race, data = data)
 xkabledply(race_vs_HrsOfSleep)
 ```
 Since the p-value of 0.000 is less than the significance level of 0.05, we rejects the null hypothesis that there is NO difference in the average hour of sleeps of different individuals between races.
+
+```{r}
+data %>% count(race)
+```
+
+```{r}
+# race_frequency <- data %>% count(race) %>%
+#   arrange(desc(race)) %>% 
+#   mutate(percentages=n/sum(n) * 100, 
+#          ypos = cumsum(percentages)- 0.5*percentages )
+# 
+# plot1<-ggplot(race_frequency, aes(x="", y=percentages, fill=race)) +
+# geom_bar(stat="identity", width=1) + 
+# coord_polar("y", start=0)+
+#   geom_text(aes(x="", y = ypos, label = scales::percent(percentages, scale = 1)))+
+#   scale_fill_manual(values=c("#0290d1", "#e88738", "#39db7f", "#7f2bed"))+labs(title = "Race Variable",fill = "Race")+theme(plot.title = element_text(face="bold",hjust = 0.5))
+# 
+# plot_grid(plot1, align = "h", axis = "b", rel_widths = c(10, 10))
+```
+
+```{r}
+agg_df <- aggregate(data$Hrs_Sleep, by=list(data$race), FUN=mean)
+agg_df
+
+```
+
+
+```{r}
+agg_df <- aggregate(data$physical_activity, by=list(data$race), FUN=mean)
+agg_df
+```
+
+```{r}
+agg_df <- aggregate(data$multiple_partners, by=list(data$race), FUN=mean)
+agg_df
+```
+
+```{r}
+agg_df <- aggregate(data$Age_Weed, by=list(data$race), FUN=mean)
+agg_df
+```
+
+```{r}
+agg_df <- aggregate(data$age_sex, by=list(data$race), FUN=mean)
+agg_df
+```
+
+```{r}
+agg_df <- aggregate(data$gender, by=list(data$race), FUN=mean)
+agg_df
+
+```
+
+```{r}
+agg_df <- aggregate(data$Age_Alc, by=list(data$race), FUN=mean)
+agg_df
+```
