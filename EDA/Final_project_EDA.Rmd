@@ -185,3 +185,13 @@ ggplot(race_vs_physicalactivity, aes(fill=physical_activity, y=total_count, x=ph
     theme(legend.position="none") +
     xlab("")
 ```
+
+```{r}
+race_vs_multipartners <- aov(multiple_partners ~ race, data =data )
+xkabledply(race_vs_multipartners)
+```
+
+```{r}
+race_vs_physicalactivity <- aov(physical_activity ~ race, data =data )
+xkabledply(race_vs_physicalactivity)
+```
