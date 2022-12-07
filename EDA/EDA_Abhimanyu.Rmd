@@ -284,17 +284,20 @@ ggplot(data_grouped_4a, aes(fill=suicide, y=total_count1, x=suicide)) +
 Overall more males have had suicidal thoughts than females. Around 40% of the males have had suicidal thoughts while only 6% of the females have had suicidal thoughts. 
 
 ```{r}
+
 data_grouped_4b <- data %>% 
               group_by(race, suicide) %>% 
               summarise(total_count2 = n(), .groups = 'drop') %>% 
               as.data.frame()
 
 ggplot(data_grouped_4b, aes(fill=suicide, y=total_count2, x=suicide)) + 
-    geom_bar(position="dodge", stat="identity") +
+    geom_bar(position="dodge", stat="identity", fill="forest green") +
     ggtitle("Studying ") +
     facet_wrap(~race) +
-    theme(legend.position="none") +
-    xlab("")
+    theme(plot.title = element_text(hjust = 0.5)) +
+    ggtitle("Observing Age when respondent had Suicidal thoughts for different Ethnic Groups") +
+    xlab("Age") +
+    ylab("Count")
 
 ```
 
