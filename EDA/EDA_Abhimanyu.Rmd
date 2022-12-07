@@ -163,7 +163,7 @@ ggplot(data_grouped_2a, aes(fill=multiple_partners, y=total_count1, x=multiple_p
     ylab("Count")
 
 ```
-On observing the bar plot for multiple partners for both genders, we can say that overall males have more partners than females. There are more number of males who have 6 partners. But there are more number of females whi have 5 partners. There is a huge gap in most of the bar graphs  because there are 3 times more males than females.
+On observing the bar plot for the Number of Partners of Respondents by Age for different genders, we can say that overall, males have more partners than females. There is more number of males who have 6 partners. But there is more number of females who have 5 partners. There is a huge gap in most of the bar graphs because there are 3 times more males than females. 
 
 ```{r}
 
@@ -183,7 +183,7 @@ ggplot(data_grouped_2b, aes(fill=Age_Weed, y=total_count2, x=Age_Weed)) +
 
 ```
 
-Most males first smoked weed at the age of 8, 11, 12 and 13 while most females first smoked weed at 10, 11 and 12. 
+On observing the bar plot for the age when respondent Smoked Weed for different genders, we can say that most males first smoked weed at the age of 8, 11, 12, and 13 while most females first smoked weed at 10, 11, and 12.
 
 ```{r}
   
@@ -222,7 +222,7 @@ ggplot(data_grouped_3a, aes(fill=multiple_partners, y=total_count1, x=multiple_p
     ylab("Count")
 
 ```
-On comparing multiple partners for different ethnic groups, we observe that majorly there is a decreasing trend. Number of people with multiple partners decrease as the number of partners increase. For ethnic group 2 we observe that most people have 6 multiple partners while similar number of people have 1 to 5 partners. Most people of ethnic group 3 have 1, 3 or 5 partners as opposed. Similar to ethnic group 1, group 3 also has a decreasing trend. Number of people with multiple partners decrease as the number of partners increase.
+On comparing multiple partners for different ethnic groups by age, we observe that majorly there is a decreasing trend. The number of people with multiple partners decreases as the number of partners increases. For ethnic group 2, we observe that most people have six multiple partners while a similar number have 1 to 5 partners. Most people of ethnic group 3 have 1, 3, or 5 partners. Identical to ethnic group 1, group 4 also has a decreasing trend. The number of people with multiple partners decreases as the number of partners increases.
 
 ```{r}
 
@@ -241,7 +241,7 @@ ggplot(data_grouped_3b, aes(fill=Age_Weed, y=total_count2, x=Age_Weed)) +
     ylab("Count")
 
 ```
-Most respondents belonging to ethnic group 1 smoked weed for the first time at age 11 and 12. There is an increasing trend form 8 to 12. For ethnic group 2, we observe that most experienced weed at age 9. For ethnic group 3, most of the respondents were atleast 10 years old. Most Respondents from ethnic group 4 were also atleast 10 years old when they smoked weed for the first time. 
+On observing the age when respondent Smoked Weed for the first time for different Ethnic Groups, most respondents who belong to ethnic group 1 smoked weed for the first time at ages 11 and 12. There is an increasing trend from 8 to 12. For ethnic group 2, we observe that most experienced weed at age 9. For ethnic group 3, most respondents were at least 10 years old. Most Respondents from ethnic group 4 were also at least 10 years old when they smoked weed for the first time. 
 
 ```{r}
   
