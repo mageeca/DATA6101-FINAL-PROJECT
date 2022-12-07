@@ -264,17 +264,20 @@ ggplot(data_grouped_3c, aes(fill=Age_Alc, y=total_count3, x=Age_Alc)) +
 Most Respondents from Ethnic group 1 had alcohol for the first time when they were atleast 11 years old. Less than 500 of them had alcohol before the age of 11. At age 10, the respondents from ethnic group 2 had alcohol. For Ethnic group 3, most of them had alcohol at age of atleast 11 years. There are few (around 560) who had alcohol at age 9. For group 4, there is an increasing trend ie as the age increases respondents who have experienced alcohol also increased.
  
 ```{r}
+
 data_grouped_4a <- data %>% 
               group_by(gender, suicide) %>% 
               summarise(total_count1 = n(), .groups = 'drop') %>% 
               as.data.frame()
 
 ggplot(data_grouped_4a, aes(fill=suicide, y=total_count1, x=suicide)) + 
-    geom_bar(position="dodge", stat="identity") +
+    geom_bar(position="dodge", stat="identity", fill="forest green") +
     ggtitle("Studying ") +
     facet_wrap(~gender) +
-    theme(legend.position="none") +
-    xlab("")
+    theme(plot.title = element_text(hjust = 0.5)) +
+    ggtitle("Observing Age when respondent had Suicidal thoughts for different Genders") +
+    xlab("Age") +
+    ylab("Count")
 
 ```
 
