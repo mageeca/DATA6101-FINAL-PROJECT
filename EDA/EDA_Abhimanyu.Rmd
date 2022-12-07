@@ -305,17 +305,20 @@ About 10 Percent (1 in 10 people) of respondents belonging to  ethnic group 1 ha
 
 
 ```{r}
+
 data_grouped_5a <- data %>% 
               group_by(gender, fight) %>% 
               summarise(total_count1 = n(), .groups = 'drop') %>% 
               as.data.frame()
 
 ggplot(data_grouped_5a, aes(fill=fight, y=total_count1, x=fight)) + 
-    geom_bar(position="dodge", stat="identity") +
+    geom_bar(position="dodge", stat="identity", fill="forest green") +
     ggtitle("Studying ") +
     facet_wrap(~gender) +
-    theme(legend.position="none") +
-    xlab("")
+    theme(plot.title = element_text(hjust = 0.5)) +
+    ggtitle("Observing Age when respondent had Fights for different Genders") +
+    xlab("Age") +
+    ylab("Count")
 
 ```
 
