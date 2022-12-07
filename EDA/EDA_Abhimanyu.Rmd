@@ -44,7 +44,11 @@ str(data_age_alc)
 
 # Plot the bar chart 
 ggplot(data_age_alc, aes(x = Age_Alc, y = total_count)) + 
-  geom_bar(stat = "identity")
+  geom_bar(stat = "identity", fill="forest green") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  ggtitle("Engaging in a Alcoholism by Age when Individual Started Drinking") +
+  xlab("Age") +
+  ylab("Count")
 
 ```
 
