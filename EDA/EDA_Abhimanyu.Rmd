@@ -261,7 +261,7 @@ ggplot(data_grouped_3c, aes(fill=Age_Alc, y=total_count3, x=Age_Alc)) +
 
 ```
 
-Most Respondents from Ethnic group 1 had alcohol for the first time when they were atleast 11 years old. Less than 500 of them had alcohol before the age of 11. At age 10, the respondents from ethnic group 2 had alcohol. For Ethnic group 3, most of them had alcohol at age of atleast 11 years. There are few (around 560) who had alcohol at age 9. For group 4, there is an increasing trend ie as the age increases respondents who have experienced alcohol also increased.
+On observing the age when respondents had their first alcoholic drink for different Ethnic Groups, we can say that most respondents from Ethnic group 1 had alcohol for the first time when they were at least 11 years old. Less than 500 of them had alcohol before the age of 11. At age 10, most of the respondents from ethnic group 2 had alcohol. For Ethnic group 3, most of them had alcohol at the age of at least 11 years. A few (around 560) had alcohol at age 9. For group 4, there is an increasing trend, i.e., as the age increases, the number of respondents who have had alcohol also increases.
  
 ```{r}
 
@@ -281,7 +281,7 @@ ggplot(data_grouped_4a, aes(fill=suicide, y=total_count1, x=suicide)) +
 
 ```
 
-Overall more males have had suicidal thoughts than females. Around 40% of the males have had suicidal thoughts while only 6% of the females have had suicidal thoughts. 
+On observing Age when the respondents have had Suicidal thoughts for different Genders, more males have had suicidal thoughts than females. Around 40% of the males have had suicidal thoughts, while only 6% of the females have had suicidal thoughts.
 
 ```{r}
 
@@ -301,7 +301,7 @@ ggplot(data_grouped_4b, aes(fill=suicide, y=total_count2, x=suicide)) +
 
 ```
 
-About 10 Percent (1 in 10 people) of respondents belonging to  ethnic group 1 have had suicidal thoughts. This is not the case with respondents belonging to ethnic group 2. Most of the respondents(about 75%) have had suicidal thoughts. We can say that every 5th person ethnic groups 3 and 4 have had suicidal thoughts.
+On observing Age when the respondents have had Suicidal thoughts for different ethnic groups, about 10 percent (1 in 10 individuals) of respondents belonging to ethnic group 1 have had suicidal thoughts. But this is not the case with respondents belonging to ethnic group 2. Most of that group's respondents(about 75%) have had suicidal thoughts. We can say that every 5th person in ethnic groups 3 and 4 has had suicidal thoughts.
 
 
 ```{r}
@@ -322,7 +322,7 @@ ggplot(data_grouped_5a, aes(fill=fight, y=total_count1, x=fight)) +
 
 ```
 
-Most of the males and females haev been in a fight. There is a higher percentage of females who have been in a fight than men. 
+On observing the age when the respondents have been in a fight for different genders, most males and females have been in a fight. A higher percentage of females have been in a fight than men.
 
 
 ```{r}
@@ -343,4 +343,4 @@ ggplot(data_grouped_5b, aes(fill=fight, y=total_count2, x=fight)) +
 
 ```
 
-Most respondents belonging to ethnic group 1 and 4 have not been in fights while most respondents from ethnic group 2 and 3have been in a fight. 
+On observing the age when the respondents have been in a fight for different ethnic, Most respondents belonging to ethnic groups 1 and 4 have not been in fights, while most respondents from ethnic groups 2 and 3 have been in a fight.
