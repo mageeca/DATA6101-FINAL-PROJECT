@@ -48,58 +48,64 @@ yes_fight <- subset(data,fight == 'yes')
 
 ```{r}
 # Age when they started drinking
-
 data_age_alc <- data %>% 
               group_by(Age_Alc) %>% 
               summarise(total_count = n(), .groups = "drop") %>% 
               as.data.frame()
-
 str(data_age_alc)
-
 # Plot the bar chart 
 ggplot(data_age_alc, aes(x = Age_Alc, y = total_count)) + 
-  geom_bar(stat = "identity")
-
+  geom_bar(stat = "identity", fill="forest green") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  ggtitle("Engaging in a Alcoholism by Age when Individual Started Drinking") +
+  xlab("Age") +
+  ylab("Count")
 ```
 
-This bar graph illustrates the count by age when the respondents had their first drink. We observe that most respondents started drinking when they were 10 and 12. There are around 500 people who began drinking at the age of eight. The number increases by 500 for each interval as it rises to 11. Overall there is an upward trend till age 11 followed by a decline till age 13.  
+
+This bar graph illustrates the count by age when the respondents had their first drink. We observe that most respondents started drinking when they were 10 and 12. There are around 500 people who began drinking at the age of eight. The number increases by 500 for each interval as it rises to 11. Overall there is an upward trend till age 11 followed by a decline till age 13. 
 
 
 ```{r}
 # Age when they started smoking
-
 data_age_weed <- data %>% 
               group_by(Age_Weed) %>% 
               summarise(total_count = n(), .groups = 'drop') %>% 
               as.data.frame()
-
 str(data_age_weed)
-
 # Plot the bar chart 
 ggplot(data_age_weed, aes(x = Age_Weed, y = total_count)) + 
-  geom_bar(stat = "identity")
-
+  geom_bar(stat = "identity", fill="forest green") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  ggtitle("Engaging in Smoking Weed by Age when Individual Started Smoking") +
+  xlab("Age") +
+  ylab("Count")
 ```
 
-This bar graph illustrates the count of respondents who smoked weed for the fisr time for age from 8 to 13 <correct english abit>. We observe that few respondents started smoking weed as early as at 8 years. There are more people who starter smokign ar age 9 (almost 1500) than at age 11 (almost 1000). There are around 1750 respondents whi had their first smoke at age 11 and 12.  
+
+This bar graph illustrates the count by age when the respondents smoked Weed for the first time. We observe that few respondents started smoking Weed as early as 8 years. More people start smoking at 9 (almost 1500) rather than 10 (nearly 1000). Around 1750 respondents first smoked Weed when they were 11 or 12 years old..  
 
 
 ```{r}
+  
 # Age when the had sex
 data_age_sex <- data %>% 
               group_by(age_sex) %>% 
               summarise(total_count = n(), .groups = 'drop') %>% 
               as.data.frame()
-
 str(data_age_sex)
-
 # Plot the bar chart 
 ggplot(data_age_sex, aes(x = age_sex, y = total_count)) + 
-  geom_bar(stat = "identity")
-
+  geom_bar(stat = "identity", fill="forest green") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  ggtitle("Engaging in a Intercourse by Age when Individual Started having Intercourse") +
+  xlab("Age") +
+  ylab("Count")
 ```
 
-From the graph above we see that most respondents had their first sexual experience at ages 10, 11 and 13. There are barely 750 respondets whi had their first experience before the age of 10. There is a huge increase in numbers when we go from age 9 to age 10.
+
+This bar graph illustrates the count by age when the respondents had their first sexual experience. While most respondents had their first sexual experience at ages 10, 11, and 13, less than 750 respondents had their first experience before age 10. There is a considerable increase in the number from age 9 to age 10.
+
 
 ```{r}
 # Multiple partners
@@ -107,16 +113,19 @@ data_age_partner <- data %>%
               group_by(multiple_partners) %>% 
               summarise(total_count = n(), .groups = 'drop') %>% 
               as.data.frame()
-
 str(data_age_partner)
-
 # Plot the bar chart 
 ggplot(data_age_partner, aes(x = multiple_partners, y = total_count)) + 
-  geom_bar(stat = "identity")
-
+  geom_bar(stat = "identity", fill="forest green") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  ggtitle("Having Multiple Partners by Age") +
+  xlab("Age") +
+  ylab("Count")
 ```
 
-We observe that most respondents have 1 partner followed by 6, 3, 2, 1 and 4. Majority of the respondents have either 1 or 6 partners. 
+
+This bar graph illustrates the count by the age of the respondent's number of partners. We observe that most respondents have 1 partner followed by 6, 3, 2, 1, and 4 partners. The majority of the respondents have either 1 or 6 partners.
+
 
 ```{r}
 # Physical Activity
