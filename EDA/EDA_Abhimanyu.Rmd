@@ -103,6 +103,7 @@ ggplot(data_age_sex, aes(x = age_sex, y = total_count)) +
 From the graph above we see that most respondents had their first sexual experience at ages 10, 11 and 13. There are barely 750 respondets whi had their first experience before the age of 10. There is a huge increase in numbers when we go from age 9 to age 10.
 
 ```{r}
+
 # Multiple partners
 data_age_partner <- data %>% 
               group_by(multiple_partners) %>% 
@@ -113,7 +114,11 @@ str(data_age_partner)
 
 # Plot the bar chart 
 ggplot(data_age_partner, aes(x = multiple_partners, y = total_count)) + 
-  geom_bar(stat = "identity")
+  geom_bar(stat = "identity", fill="forest green") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  ggtitle("Having Multiple Partners by Age") +
+  xlab("Age") +
+  ylab("Count")
 
 ```
 
