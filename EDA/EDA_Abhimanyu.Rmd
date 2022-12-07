@@ -166,17 +166,20 @@ ggplot(data_grouped_2a, aes(fill=multiple_partners, y=total_count1, x=multiple_p
 On observing the bar plot for multiple partners for both genders, we can say that overall males have more partners than females. There are more number of males who have 6 partners. But there are more number of females whi have 5 partners. There is a huge gap in most of the bar graphs  because there are 3 times more males than females.
 
 ```{r}
+
 data_grouped_2b <- data %>% 
               group_by(gender, Age_Weed) %>% 
               summarise(total_count2 = n(), .groups = 'drop') %>% 
               as.data.frame()
 
 ggplot(data_grouped_2b, aes(fill=Age_Weed, y=total_count2, x=Age_Weed)) + 
-    geom_bar(position="dodge", stat="identity") +
+    geom_bar(position="dodge", stat="identity", fill="forest green") +
     ggtitle("Studying ") +
     facet_wrap(~gender) +
-    theme(legend.position="none") +
-    xlab("")
+    theme(plot.title = element_text(hjust = 0.5)) +
+    ggtitle("Observing Age whe respondent Smoked Weed for different genders by Age") +
+    xlab("Age") +
+    ylab("Count")
 
 ```
 
