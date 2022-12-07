@@ -62,7 +62,7 @@ ggplot(data_age_alc, aes(x = Age_Alc, y = total_count)) +
 
 ```
 
-This bar graph illustrates the count of respondents who had their first drink for age from 8 to 13 <correct english abit>. We observe that most respondents started drinking when they were 10 and 12. There are around 500 people who started drink at age 8 and the number increases with 500 as the age increases to 11. Overall we can see that there is an upward trend till age 11 followed by a decline till age 13. 
+This bar graph illustrates the count by age when the respondents had their first drink. We observe that most respondents started drinking when they were 10 and 12. There are around 500 people who began drinking at the age of eight. The number increases by 500 for each interval as it rises to 11. Overall there is an upward trend till age 11 followed by a decline till age 13.  
 
 
 ```{r}
