@@ -147,17 +147,20 @@ ggplot(data_physical_activity, aes(x = physical_activity, y = total_count)) +
 Most respondents(over 4000) exercise 7 days a week.
 
 ```{r}
+  
 data_grouped_2a <- data %>% 
               group_by(gender, multiple_partners) %>% 
               summarise(total_count1 = n(), .groups = 'drop') %>% 
               as.data.frame()
 
 ggplot(data_grouped_2a, aes(fill=multiple_partners, y=total_count1, x=multiple_partners)) + 
-    geom_bar(position="dodge", stat="identity") +
+    geom_bar(position="dodge", stat="identity", fill="forest green") +
     ggtitle("Studying ") +
     facet_wrap(~gender) +
-    theme(legend.position="none") +
-    xlab("")
+    theme(plot.title = element_text(hjust = 0.5)) +
+    ggtitle("Observing Multiple Partners of Respondents of Age for different genders") +
+    xlab("Age") +
+    ylab("Count")
 
 ```
 On observing the bar plot for multiple partners for both genders, we can say that overall males have more partners than females. There are more number of males who have 6 partners. But there are more number of females whi have 5 partners. There is a huge gap in most of the bar graphs  because there are 3 times more males than females.
