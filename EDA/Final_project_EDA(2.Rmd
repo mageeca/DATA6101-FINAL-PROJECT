@@ -304,39 +304,41 @@ On observing Age when the respondents have had Suicidal thoughts for different e
 
 ```{r}
 data_grouped_5a <- data %>% 
-              group_by(sex, fight) %>% 
+              group_by(gender, fight) %>% 
               summarise(total_count1 = n(), .groups = 'drop') %>% 
               as.data.frame()
-
 ggplot(data_grouped_5a, aes(fill=fight, y=total_count1, x=fight)) + 
-    geom_bar(position="dodge", stat="identity") +
+    geom_bar(position="dodge", stat="identity", fill="forest green") +
     ggtitle("Studying ") +
-    facet_wrap(~sex) +
-    theme(legend.position="none") +
-    xlab("")
-
+    facet_wrap(~gender) +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    ggtitle("Observing Age when respondent had Fights for different Genders") +
+    xlab("Age") +
+    ylab("Count")
 ```
 
-Most of the males and females haev been in a fight. There is a higher percentage of females who have been in a fight than men. 
+
+On observing the age when the respondents have been in a fight for different genders, most males and females have been in a fight. A higher percentage of females have been in a fight than men.
 
 
 ```{r}
-
 data_grouped_5b <- data %>% 
               group_by(race, fight) %>% 
               summarise(total_count2 = n(), .groups = 'drop') %>% 
               as.data.frame()
-
 ggplot(data_grouped_5b, aes(fill=fight, y=total_count2, x=fight)) + 
-    geom_bar(position="dodge", stat="identity") +
+    geom_bar(position="dodge", stat="identity", fill="forest green") +
     ggtitle("Studying ") +
     facet_wrap(~race) +
-    theme(legend.position="none") +
-    xlab("")
-
+    theme(plot.title = element_text(hjust = 0.5)) +
+    ggtitle("Observing Age when respondent had Fights for different Ethnic Groups") +
+    xlab("Age") +
+    ylab("Count")
 ```
 
-Most respondents belonging to ethnic group 1 and 4 have not been in fights while most respondents from ethnic group 2 and 3have been in a fight. 
+
+On observing the age when the respondents have been in a fight for different ethnic, Most respondents belonging to ethnic groups 1 and 4 have not been in fights, while most respondents from ethnic groups 2 and 3 have been in a fight.
+
 
 ```{r}
 library(corrplot)
