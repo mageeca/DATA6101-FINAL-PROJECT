@@ -81,6 +81,7 @@ This bar graph illustrates the count of respondents who smoked weed for the fisr
 
 
 ```{r}
+  
 # Age when the had sex
 data_age_sex <- data %>% 
               group_by(age_sex) %>% 
@@ -91,7 +92,11 @@ str(data_age_sex)
 
 # Plot the bar chart 
 ggplot(data_age_sex, aes(x = age_sex, y = total_count)) + 
-  geom_bar(stat = "identity")
+  geom_bar(stat = "identity", fill="forest green") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  ggtitle("Engaging in a Intercourse by Age when Individual Started having Intercourse") +
+  xlab("Age") +
+  ylab("Count")
 
 ```
 
