@@ -11,6 +11,14 @@ library(ggplot2)
 library(dplyr)
 library(corrplot)
 library(caret)
+library(rpart)
+library(rpart.plot)
+library(DAAG)
+library(party)
+library(mlbench)
+library(caret)
+library(pROC)
+library(tree)
 ```
 
 ## SMART QUESTION
@@ -61,32 +69,31 @@ data$suicide1 <- recode(data$suicide, '0' = 1, '1' = 0)
 summary(data)
 data$gender <- as.factor(data$gender)
 data$race <- as.factor(data$race)
-data$suicide <- as.factor(data$suicide)
-data$fight <- as.factor(data$fight)
+data$suicide1 <- as.factor(data$suicide1)
+data$fight1 <- as.factor(data$fight1)
 data$Age_Alc <- as.numeric(data$Age_Alc)
 ```
 
 
-You can also embed plots, for example:
 
-
+Question 1 - Logistic Regression 
 
 ```{r}
 
-set.seed(927)
+set.seed(920)
 sample <- sample(c(TRUE, FALSE), nrow(data), replace=TRUE, prob=c(0.8,0.2))
 traindata1  <- data[sample, ]
 testdata1   <- data[!sample, ]
 
 
-mod1a<-glm(formula = fight1 ~ Age_Weed + Age_Alc + age_sex + race , family = "binomial", data = traindata1)
+model1a<-glm(formula = fight1 ~ Age_Weed + Age_Alc + age_sex + race , family = "binomial", data = traindata1)
 
-summary(mod1a)
+summary(model1a)
 
-plot(mod1a)
+plot(model1a)
 
 
-testdata1$modelPredicted1a <- predict(mod1a, newdata = testdata1, type = 'response')
+testdata1$modelPredicted1a <- predict(model1a, newdata = testdata1, type = 'response')
 testdata1 <- testdata1  %>% mutate(model_pred1a = 1*(modelPredicted1a > .55) + 0)
 
 testdata1 <- testdata1 %>% mutate(accurate1a = 1*(model_pred1a == fight1))
@@ -94,25 +101,58 @@ Model1aAccuracyPercentage <- (sum(testdata1$accurate1)/nrow(testdata1))*100
 Model1aAccuracyPercentage
 
 
-confMat1 <- table(testdata1$fight1, testdata1$modelPredicted1 > 0.55)
+confMat1 <- table(testdata1$fight1, testdata1$modelPredicted1a > 0.55)
 confMat1
 ```
 Here 0 in confusion matrix means the responding teen won't have a fight and 1 means that they are gonna have a fight.
 
+Question 1b - Decision Tree------------ 
+
 ```{r}
-set.seed(997)
+
+set.seed(920)
+sample <- sample(c(TRUE, FALSE), nrow(data), replace=TRUE, prob=c(0.8,0.2))
+traindata1  <- data[sample, ]
+testdata1   <- data[!sample, ]
+
+model1b<-rpart(formula = fight1 ~ Age_Weed + Age_Alc + age_sex + race , data = traindata1, method = 'class')
+
+rpart.plot(model1b, extra = 106)
+
+
+
+testdata1$modelPredicted1b <-predict(model1b, testdata1, type = 'class')
+
+table1b <- confusionMatrix(testdata1$modelPredicted1b, testdata1$fight1, positive='1')
+table1b
+
+printcp(model1b)
+plotcp(model1b)
+
+
+rpart.rules(model1b)
+
+
+```
+
+
+Question 2
+
+
+```{r}
+set.seed(927)
 sample <- sample(c(TRUE, FALSE), nrow(data), replace=TRUE, prob=c(0.8,0.2))
 traindata2  <- data[sample, ]
 testdata2   <- data[!sample, ]
 
-mod2a<-glm(formula = suicide1 ~ Age_Weed + Age_Alc + age_sex + race , family = "binomial", data = traindata2)
+model2a<-glm(formula = suicide1 ~ Age_Weed + Age_Alc + age_sex + race , family = "binomial", data = traindata2)
 
-summary(mod2a)
-plot(mod2a)
+summary(model2a)
+plot(model2a)
 
 
 
-testdata2$modelPredicted2a <- predict(mod2a, newdata = testdata2, type = 'response')
+testdata2$modelPredicted2a <- predict(model2a, newdata = testdata2, type = 'response')
 testdata2 <- testdata2  %>% mutate(model_pred2a = 1*(modelPredicted2a > .55) + 0)
 
 testdata2 <- testdata2 %>% mutate(accurate2a = 1*(model_pred2a == suicide1))
@@ -125,6 +165,35 @@ confMat2
 
 
 ```
+Question 2b - Decision Tree ----------------------
+
+```{r}
+
+set.seed(927)
+sample <- sample(c(TRUE, FALSE), nrow(data), replace=TRUE, prob=c(0.8,0.2))
+traindata2  <- data[sample, ]
+testdata2   <- data[!sample, ]
+
+model2b<-rpart(formula = suicide1 ~ Age_Weed + Age_Alc + age_sex + race , data = traindata2, method = 'class')
+
+rpart.plot(model2b, extra = 106)
+
+
+
+testdata2$modelPredicted2b <-predict(model2b, testdata2, type = 'class')
+
+table2b <- confusionMatrix(testdata2$modelPredicted2b, testdata1$suicide1, positive='1')
+table2b
+
+printcp(model2b)
+plotcp(model2b)
+
+rpart.rules(model2b)
+
+
+```
+
+Question 3 - 
 
 ```{r}
 
@@ -135,7 +204,9 @@ testdata3   <- data[!sample, ]
 
 
 model3a <- lm(Hrs_Sleep ~  Age_Alc + Age_Weed + age_sex + race, data=traindata3)
+
 summary(model3a)
+
 xkabledply(model3a, title = paste("Model :", format(formula(model3a)) ) )
 xkablevif(model3a)
 
@@ -146,15 +217,48 @@ testdata3
 
 ```
 
+Question 3b - Decision Tree 
+
 ```{r}
+
 set.seed(997)
+sample <- sample(c(TRUE, FALSE), nrow(data), replace=TRUE, prob=c(0.8,0.2))
+traindata3  <- data[sample, ]
+testdata3   <- data[!sample, ]
+
+model3b<-rpart(formula = Hrs_Sleep ~  Age_Alc + Age_Weed + race, data=traindata3, method = 'anova')
+
+rpart.plot(model3b)
+
+
+
+testdata3$modelPredicted3b <-predict(model3b, testdata3, type = 'vector')
+testdata3
+
+
+printcp(model3b)
+plotcp(model3b)
+
+rpart.rules(model3b)
+
+
+```
+
+
+Question 4
+
+
+```{r}
+set.seed(998)
 sample <- sample(c(TRUE, FALSE), nrow(data), replace=TRUE, prob=c(0.8,0.2))
 traindata4  <- data[sample, ]
 testdata4   <- data[!sample, ]
 
 
 model4a <- lm(multiple_partners ~  Age_Alc + Age_Weed + age_sex + race, data=traindata4)
+
 summary(model4a)
+
 xkabledply(model4a, title = paste("Model :", format(formula(model4a)) ) )
 xkablevif(model4a)
 
@@ -163,8 +267,38 @@ testdata4$modelPredicted4a <- predict(model4a, newdata = testdata4)
 testdata4
 ```
 
+Question 4b - Decision Tree 
+
 ```{r}
-set.seed(997)
+
+set.seed(998)
+sample <- sample(c(TRUE, FALSE), nrow(data), replace=TRUE, prob=c(0.8,0.2))
+traindata4  <- data[sample, ]
+testdata4   <- data[!sample, ]
+
+model4b<-rpart(formula = multiple_partners ~  Age_Alc + Age_Weed + race, data=traindata4, method = 'anova')
+
+rpart.plot(model4b)
+
+
+
+testdata4$modelPredicted4b <-predict(model4b, testdata4, type = 'vector')
+testdata4
+
+
+printcp(model4b)
+plotcp(model4b)
+
+rpart.rules(model4b)
+
+
+```
+
+
+Question 5
+
+```{r}
+set.seed(1027)
 sample <- sample(c(TRUE, FALSE), nrow(data), replace=TRUE, prob=c(0.8,0.2))
 traindata5  <- data[sample, ]
 testdata5   <- data[!sample, ]
@@ -179,3 +313,33 @@ xkablevif(model5a)
 testdata5$modelPredicted5a <- predict(model5a, newdata = testdata5)
 testdata5
 ```
+
+Question 5b - Decision Tree 
+
+```{r}
+
+set.seed(1027)
+sample <- sample(c(TRUE, FALSE), nrow(data), replace=TRUE, prob=c(0.8,0.2))
+traindata5  <- data[sample, ]
+testdata5   <- data[!sample, ]
+
+model5b<-rpart(formula = physical_activity ~  Age_Alc + Age_Weed + race, data=traindata5, method = 'anova')
+
+rpart.plot(model5b)
+
+
+
+testdata5$modelPredicted5b <-predict(model5b, testdata5, type = 'vector')
+testdata5$modelPredicted5b
+
+
+printcp(model5b)
+plotcp(model5b)
+
+
+rpart.rules(model5b)
+
+
+```
+
+
