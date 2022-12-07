@@ -213,11 +213,13 @@ data_grouped_3a <- data %>%
               as.data.frame()
 
 ggplot(data_grouped_3a, aes(fill=multiple_partners, y=total_count1, x=multiple_partners)) + 
-    geom_bar(position="dodge", stat="identity") +
+    geom_bar(position="dodge", stat="identity", fill="forest green") +
     ggtitle("Studying ") +
     facet_wrap(~race) +
-    theme(legend.position="none") +
-    xlab("")
+    theme(plot.title = element_text(hjust = 0.5)) +
+    ggtitle("Observing Multiple partners of Respondents by Age for different Ethnic Groups") +
+    xlab("Age") +
+    ylab("Count")
 
 ```
 On comparing multiple partners for different ethnic groups, we observe that majorly there is a decreasing trend. Number of people with multiple partners decrease as the number of partners increase. For ethnic group 2 we observe that most people have 6 multiple partners while similar number of people have 1 to 5 partners. Most people of ethnic group 3 have 1, 3 or 5 partners as opposed. Similar to ethnic group 1, group 3 also has a decreasing trend. Number of people with multiple partners decrease as the number of partners increase.
