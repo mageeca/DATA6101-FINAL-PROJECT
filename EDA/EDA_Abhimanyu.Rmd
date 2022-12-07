@@ -186,17 +186,20 @@ ggplot(data_grouped_2b, aes(fill=Age_Weed, y=total_count2, x=Age_Weed)) +
 Most males first smoked weed at the age of 8, 11, 12 and 13 while most females first smoked weed at 10, 11 and 12. 
 
 ```{r}
+  
 data_grouped_2c <- data %>% 
               group_by(gender, Age_Alc) %>% 
               summarise(total_count3 = n(), .groups = 'drop') %>% 
               as.data.frame()
 
 ggplot(data_grouped_2c, aes(fill=Age_Alc, y=total_count3, x=Age_Alc)) + 
-    geom_bar(position="dodge", stat="identity") +
+    geom_bar(position="dodge", stat="identity", fill="forest green") +
     ggtitle("Studying ") +
     facet_wrap(~gender) +
-    theme(legend.position="none") +
-    xlab("")
+    theme(plot.title = element_text(hjust = 0.5)) +
+    ggtitle("Observing Age when respondent had first Alcohol Drink for different genders") +
+    xlab("Age") +
+    ylab("Count")
 
 ```
 
