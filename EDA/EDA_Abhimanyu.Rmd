@@ -125,6 +125,7 @@ ggplot(data_age_partner, aes(x = multiple_partners, y = total_count)) +
 We observe that most respondents have 1 partner followed by 6, 3, 2, 1 and 4. Majority of the respondents have either 1 or 6 partners. 
 
 ```{r}
+
 # Physical Activity
 data_physical_activity <- data %>% 
               group_by(physical_activity) %>% 
@@ -135,7 +136,11 @@ str(data_physical_activity)
 
 # Plot the bar chart 
 ggplot(data_physical_activity, aes(x = physical_activity, y = total_count)) + 
-  geom_bar(stat = "identity")
+  geom_bar(stat = "identity", fill="forest green") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  ggtitle("No. of Days a Week the respondent Exercise by Age") +
+  xlab("Age") +
+  ylab("Count")
 
 ```
 
