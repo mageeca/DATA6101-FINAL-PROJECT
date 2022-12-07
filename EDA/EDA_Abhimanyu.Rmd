@@ -33,6 +33,7 @@ data$suicide <- recode(data$suicide, '0' = 1, '1' = 0)
 
 
 ```{r}
+
 # Age when they started drinking
 
 data_age_alc <- data %>% 
@@ -56,6 +57,7 @@ This bar graph illustrates the count of respondents who had their first drink fo
 
 
 ```{r}
+
 # Age when they started smoking
 
 data_age_weed <- data %>% 
@@ -67,7 +69,11 @@ str(data_age_weed)
 
 # Plot the bar chart 
 ggplot(data_age_weed, aes(x = Age_Weed, y = total_count)) + 
-  geom_bar(stat = "identity")
+  geom_bar(stat = "identity", fill="forest green") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  ggtitle("Engaging in Smoking Weed by Age when Individual Started Smoking") +
+  xlab("Age") +
+  ylab("Count")
 
 ```
 
