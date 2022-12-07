@@ -232,11 +232,13 @@ data_grouped_3b <- data %>%
               as.data.frame()
 
 ggplot(data_grouped_3b, aes(fill=Age_Weed, y=total_count2, x=Age_Weed)) + 
-    geom_bar(position="dodge", stat="identity") +
+    geom_bar(position="dodge", stat="identity", fill="forest green") +
     ggtitle("Studying ") +
     facet_wrap(~race) +
-    theme(legend.position="none") +
-    xlab("")
+    theme(plot.title = element_text(hjust = 0.5)) +
+    ggtitle("Observing Age when respondent Smoked Weed the first time for different Ethnic Groups") +
+    xlab("Age") +
+    ylab("Count")
 
 ```
 Most respondents belonging to ethnic group 1 smoked weed for the first time at age 11 and 12. There is an increasing trend form 8 to 12. For ethnic group 2, we observe that most experienced weed at age 9. For ethnic group 3, most of the respondents were atleast 10 years old. Most Respondents from ethnic group 4 were also atleast 10 years old when they smoked weed for the first time. 
