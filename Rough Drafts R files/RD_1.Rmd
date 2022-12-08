@@ -95,18 +95,23 @@ plot(model1a)
 
 
 testdata1$modelPredicted1a <- predict(model1a, newdata = testdata1, type = 'response')
-testdata1 <- testdata1  %>% mutate(model_pred1a = 1*(modelPredicted1a > .55) + 0)
+testdata1
 
-testdata1 <- testdata1 %>% mutate(accurate1a = 1*(model_pred1a == fight1))
-Model1aAccuracyPercentage <- (sum(testdata1$accurate1)/nrow(testdata1))*100
-Model1aAccuracyPercentage
-print(paste0("Model accuracy percentage: ", Model1aAccuracyPercentage))
+confusionMatrix(as.factor(as.numeric(testdata1$modelPredicted1a>0.55)), testdata1$fight1)
+# 
+# testdata1 <- testdata1  %>% mutate(model_pred1a = 1*(modelPredicted1a > .55) + 0)
+# 
+# testdata1 <- testdata1 %>% mutate(accurate1a = 1*(model_pred1a == fight1))
+# Model1aAccuracyPercentage <- (sum(testdata1$accurate1)/nrow(testdata1))*100
+# Model1aAccuracyPercentage
+# print(paste0("Model accuracy percentage: ", Model1aAccuracyPercentage))
+# 
+# 
+# confMat1 <- table(reference = testdata1$fight1, data = testdata1$modelPredicted1a > 0.55)
+# confMat1
 
 
-confMat1 <- table(testdata1$fight1, testdata1$modelPredicted1a > 0.55)
-confMat1
 ```
-Here 0 in confusion matrix means the responding teen won't have a fight and 1 means that they are gonna have a fight.
 
 Question 1b - Decision Tree------------ 
 
@@ -176,16 +181,20 @@ plot(model2a)
 
 
 testdata2$modelPredicted2a <- predict(model2a, newdata = testdata2, type = 'response')
-testdata2 <- testdata2  %>% mutate(model_pred2a = 1*(modelPredicted2a > .55) + 0)
-
-testdata2 <- testdata2 %>% mutate(accurate2a = 1*(model_pred2a == suicide1))
-Model2aAccuracyPercentage <- (sum(testdata2$accurate2)/nrow(testdata2))*100
-Model2aAccuracyPercentage
-print(paste0("Model accuracy percentage: ", Model2aAccuracyPercentage))
 
 
-confMat2 <- table(testdata2$suicide1, testdata2$modelPredicted2a > 0.55)
-confMat2
+confusionMatrix(as.factor(as.numeric(testdata2$modelPredicted2a>0.55)), testdata2$suicide1)
+
+# testdata2 <- testdata2  %>% mutate(model_pred2a = 1*(modelPredicted2a > .55) + 0)
+# 
+# testdata2 <- testdata2 %>% mutate(accurate2a = 1*(model_pred2a == suicide1))
+# Model2aAccuracyPercentage <- (sum(testdata2$accurate2)/nrow(testdata2))*100
+# Model2aAccuracyPercentage
+# print(paste0("Model accuracy percentage: ", Model2aAccuracyPercentage))
+# 
+# 
+# confMat2 <- table(testdata2$suicide1, testdata2$modelPredicted2a > 0.55)
+# confMat2
 
 
 ```
