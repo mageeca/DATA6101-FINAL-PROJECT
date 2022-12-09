@@ -110,7 +110,39 @@ confusionMatrix(as.factor(as.numeric(testdata1$modelPredicted1a>0.55)), testdata
 # confMat1 <- table(reference = testdata1$fight1, data = testdata1$modelPredicted1a > 0.55)
 # confMat1
 
+# Predict test data based on model
+predict_reg <- predict(model1a, 
+                       testdata1, type = "response")
+predict_reg  
+   
+# Changing probabilities
+predict_reg <- ifelse(predict_reg >0.5, 1, 0)
+   
+# Evaluating model accuracy
+# using confusion matrix
+table(testdata1$fight1, predict_reg)
+   
+missing_classerr <- mean(predict_reg != testdata1$fight1)
+print(paste('Accuracy =', 1 - missing_classerr))
 
+# ROC-AUC Curve
+ROCPred <- prediction(predict_reg, testdata1$fight1) 
+ROCPer <- performance(ROCPred, measure = "tpr", 
+                             x.measure = "fpr")
+   
+auc <- performance(ROCPred, measure = "auc")
+auc <- auc@y.values[[1]]
+auc
+   
+# Plotting curve
+plot(ROCPer)
+plot(ROCPer, colorize = TRUE, 
+     print.cutoffs.at = seq(0.1, by = 0.1), 
+     main = "ROC CURVE")
+abline(a = 0, b = 1)
+   
+auc <- round(auc, 4)
+legend(.6, .4, auc, title = "AUC", cex = 1)
 ```
 
 Question 1b - Decision Tree------------ 
@@ -139,7 +171,25 @@ plotcp(model1b)
 
 rpart.rules(model1b)
 
+### plotting ROC curve and calculating AUC metric
 
+#predictionswithProbs<- predict(model1b, testdata1, type = 'prob')
+#auc<-auc(testdata1$fight1,predictionswithProbs[,2])
+#plot(roc(testdata1$fight1,predictionswithProbs[,2]))
+
+
+DTPrediction <- predict(model1b, testdata1,type = "prob")
+Prediction <- prediction(DTPrediction[,2],testdata1$fight1)
+performance <- performance(Prediction, "tpr","fpr")
+# plotting ROC curve
+plot(performance,main = "ROC Curve",col = 2,lwd = 2)
+abline(a = 0,b = 1,lwd = 2,lty = 3,col = "black")
+
+#AUC
+DTPrediction <- prediction(DTPrediction[,2],testdata1$fight1)
+aucDT <- performance(DTPrediction, measure = "auc")
+aucDT <- aucDT@y.values[[1]]
+aucDT
 ```
 
 Question 1c - Random Forest ------------ 
@@ -160,7 +210,19 @@ confusionMatrix(testdata1$fight1, testdata1$modelPredicted1c)
 
 plot(model1c)
 
+### plotting ROC curve and calculating AUC metric
+DTPrediction1 <- predict(model1c, testdata1,type = "prob")
+Prediction <- prediction(DTPrediction1[,2],testdata1$fight1)
+performance <- performance(Prediction, "tpr","fpr")
+# plotting ROC curve
+plot(performance,main = "ROC Curve",col = 2,lwd = 2)
+abline(a = 0,b = 1,lwd = 2,lty = 3,col = "black")
 
+#AUC
+DTPrediction1 <- prediction(DTPrediction1[,2],testdata1$fight1)
+aucDT <- performance(DTPrediction1, measure = "auc")
+aucDT <- aucDT@y.values[[1]]
+aucDT
 ```
 
 
@@ -196,8 +258,41 @@ confusionMatrix(as.factor(as.numeric(testdata2$modelPredicted2a>0.55)), testdata
 # confMat2 <- table(testdata2$suicide1, testdata2$modelPredicted2a > 0.55)
 # confMat2
 
+# Predict test data based on model
+predict_reg <- predict(model2a, 
+                       testdata2, type = "response")
+predict_reg  
+   
+# Changing probabilities
+predict_reg <- ifelse(predict_reg >0.5, 1, 0)
+   
+# Evaluating model accuracy
+# using confusion matrix
+table(testdata2$suicide1, predict_reg)
+   
+missing_classerr <- mean(predict_reg != testdata2$suicide1)
+print(paste('Accuracy =', 1 - missing_classerr))
 
+# ROC-AUC Curve
+ROCPred <- prediction(predict_reg, testdata2$suicide1) 
+ROCPer <- performance(ROCPred, measure = "tpr", 
+                             x.measure = "fpr")
+   
+auc <- performance(ROCPred, measure = "auc")
+auc <- auc@y.values[[1]]
+auc
+   
+# Plotting curve
+plot(ROCPer)
+plot(ROCPer, colorize = TRUE, 
+     print.cutoffs.at = seq(0.1, by = 0.1), 
+     main = "ROC CURVE")
+abline(a = 0, b = 1)
+   
+auc <- round(auc, 4)
+legend(.6, .4, auc, title = "AUC", cex = 1)
 ```
+
 Question 2b - Decision Tree ----------------------
 
 ```{r}
@@ -224,7 +319,19 @@ plotcp(model2b)
 
 rpart.rules(model2b)
 
+### plotting ROC curve and calculating AUC metric
+DTPrediction <- predict(model2b, testdata1,type = "prob")
+Prediction <- prediction(DTPrediction[,2],testdata1$suicide1)
+performance <- performance(Prediction, "tpr","fpr")
+# plotting ROC curve
+plot(performance,main = "ROC Curve",col = 2,lwd = 2)
+abline(a = 0,b = 1,lwd = 2,lty = 3,col = "black")
 
+#AUC
+DTPrediction <- prediction(DTPrediction[,2],testdata1$suicide1)
+aucDT <- performance(DTPrediction, measure = "auc")
+aucDT <- aucDT@y.values[[1]]
+aucDT
 ```
 
 Question 2c - Random Forest ------------ 
@@ -245,6 +352,19 @@ confusionMatrix(testdata2$suicide1, testdata2$modelPredicted2c)
 
 plot(model2c)
 
+### plotting ROC curve and calculating AUC metric
+DTPrediction1 <- predict(model2c, testdata1,type = "prob")
+Prediction <- prediction(DTPrediction1[,2],testdata1$suicide1)
+performance <- performance(Prediction, "tpr","fpr")
+# plotting ROC curve
+plot(performance,main = "ROC Curve",col = 2,lwd = 2)
+abline(a = 0,b = 1,lwd = 2,lty = 3,col = "black")
+
+#AUC
+DTPrediction1 <- prediction(DTPrediction1[,2],testdata1$suicide1)
+aucDT <- performance(DTPrediction1, measure = "auc")
+aucDT <- aucDT@y.values[[1]]
+aucDT
 
 ```
 
@@ -269,7 +389,38 @@ xkablevif(model3a)
 testdata3$modelPredicted3a <- predict(model3a, newdata = testdata3)
 testdata3
 
+# RESIDUALS ANALYSIS
+# 
+qqnorm(residuals(model3a))
+qqline(residuals(model3a), col="red")
 
+# shapiro.test(residuals(lm.fit))
+
+# EVALUATE THE QUALITY OF THE MODEL
+# 
+
+# create a random training and a testing set
+set.seed(1)
+row.number <- sample(1:nrow(data), 0.8*nrow(data))
+
+train <- data[row.number,]
+test <- data[-row.number,]
+
+# estimate the linear fit with the training set
+multi.lm.fit0.8_1 <- lm(Hrs_Sleep~Age_Alc  +
+                                    Age_Weed + 
+                                    age_sex +
+                                    race, 
+                      data=train)
+summary(multi.lm.fit0.8_1)
+
+# predict on testing set
+prediction.multi0.8_1 <- predict(multi.lm.fit0.8_1, newdata = test)
+err0.8 <- prediction.multi0.8_1 - test$Hrs_Sleep
+rmse <- sqrt(mean(err0.8^2))
+mape <- mean(abs(err0.8/test$Hrs_Sleep))
+
+c(RMSE=rmse,mape=mape,R2=summary(multi.lm.fit0.8_1)$r.squared)
 ```
 
 Question 3b - Decision Tree 
@@ -337,6 +488,39 @@ xkablevif(model4a)
 
 testdata4$modelPredicted4a <- predict(model4a, newdata = testdata4)
 testdata4
+
+# RESIDUALS ANALYSIS
+# 
+qqnorm(residuals(model4a))
+qqline(residuals(model4a), col="red")
+
+# shapiro.test(residuals(lm.fit))
+
+# EVALUATE THE QUALITY OF THE MODEL
+# 
+
+# create a random training and a testing set
+set.seed(1)
+row.number <- sample(1:nrow(data), 0.8*nrow(data))
+
+train <- data[row.number,]
+test <- data[-row.number,]
+
+# estimate the linear fit with the training set
+multi.lm.fit0.8 <- lm(multiple_partners~Age_Alc  +
+                                    Age_Weed + 
+                                    age_sex +
+                                    race, 
+                      data=train)
+summary(multi.lm.fit0.8)
+
+# predict on testing set
+prediction.multi0.8 <- predict(multi.lm.fit0.8, newdata = test)
+err0.8 <- prediction.multi0.8 - test$multiple_partners
+rmse <- sqrt(mean(err0.8^2))
+mape <- mean(abs(err0.8/test$multiple_partners))
+
+c(RMSE=rmse,mape=mape,R2=summary(multi.lm.fit0.8)$r.squared)
 ```
 
 Question 4b - Decision Tree 
@@ -403,6 +587,39 @@ xkablevif(model5a)
 
 testdata5$modelPredicted5a <- predict(model5a, newdata = testdata5)
 testdata5
+
+# RESIDUALS ANALYSIS
+# 
+qqnorm(residuals(model5a))
+qqline(residuals(model5a), col="red")
+
+# shapiro.test(residuals(lm.fit)
+
+# EVALUATE THE QUALITY OF THE MODEL
+# 
+
+# create a random training and a testing set
+set.seed(1)
+row.number <- sample(1:nrow(data), 0.8*nrow(data))
+
+train <- data[row.number,]
+test <- data[-row.number,]
+
+# estimate the linear fit with the training set
+multi.lm.fit0.8_2 <- lm(physical_activity~Age_Alc  +
+                                    Age_Weed + 
+                                    age_sex +
+                                    race, 
+                      data=train)
+summary(multi.lm.fit0.8_2)
+
+# predict on testing set
+prediction.multi0.8_2 <- predict(multi.lm.fit0.8_2, newdata = test)
+err0.8 <- prediction.multi0.8_2 - test$physical_activity
+rmse <- sqrt(mean(err0.8^2))
+mape <- mean(abs(err0.8/test$physical_activity))
+
+c(RMSE=rmse,mape=mape,R2=summary(multi.lm.fit0.8_2)$r.squared)
 ```
 
 Question 5b - Decision Tree 
