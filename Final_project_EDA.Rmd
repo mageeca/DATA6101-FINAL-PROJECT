@@ -611,6 +611,8 @@ plot(DecisionTreeModel1)
 text(DecisionTreeModel1, pretty = 0)
 summary(DecisionTreeModel1)
 ```
+
+
 ```{r}
 # ---------------------------------------------------------------------------
 # DECISION TREE TO FIND FIGHT
@@ -712,3 +714,72 @@ aucDT
 
 ```
 
+```{r}
+# ---------------------------------------------------------------------------
+# RANDOM FOREST TO FIND FIGHT
+# ---------------------------------------------------------------------------
+
+set.seed(920)
+sample <- sample(c(TRUE, FALSE), nrow(data), replace=TRUE, prob=c(0.8,0.2))
+traindata1  <- data[sample, ]
+testdata1   <- data[!sample, ]
+
+model1c<-randomForest(formula = fight1 ~ Age_Weed + Age_Alc + age_sex + race , data = traindata1, proximity=TRUE, type='classification', na.action=na.exclude)
+print(model1c)
+
+testdata1$modelPredicted1c <-predict(model1c, testdata1)
+
+confusionMatrix(testdata1$fight1, testdata1$modelPredicted1c)
+
+plot(model1c)
+
+### plotting ROC curve and calculating AUC metric
+DTPrediction1 <- predict(model1c, testdata1,type = "prob")
+Prediction <- prediction(DTPrediction1[,2],testdata1$fight1)
+performance <- performance(Prediction, "tpr","fpr")
+# plotting ROC curve
+plot(performance,main = "ROC Curve",col = 2,lwd = 2)
+abline(a = 0,b = 1,lwd = 2,lty = 3,col = "black")
+
+#AUC
+DTPrediction1 <- prediction(DTPrediction1[,2],testdata1$fight1)
+aucDT <- performance(DTPrediction1, measure = "auc")
+aucDT <- aucDT@y.values[[1]]
+aucDT
+```
+
+
+```{r}
+# ---------------------------------------------------------------------------
+# RANDOM FOREST TO FIND SUICIDE
+# ---------------------------------------------------------------------------
+
+set.seed(920)
+sample <- sample(c(TRUE, FALSE), nrow(data), replace=TRUE, prob=c(0.8,0.2))
+traindata2  <- data[sample, ]
+testdata2   <- data[!sample, ]
+
+model2c<-randomForest(formula = suicide1 ~ Age_Weed + Age_Alc + age_sex + race , data = traindata2, proximity=TRUE, type='classification', na.action=na.exclude)
+print(model2c)
+
+testdata2$modelPredicted2c <-predict(model2c, testdata2)
+
+confusionMatrix(testdata2$suicide1, testdata2$modelPredicted2c)
+
+plot(model2c)
+
+
+### plotting ROC curve and calculating AUC metric
+DTPrediction1 <- predict(model2c, testdata1,type = "prob")
+Prediction <- prediction(DTPrediction1[,2],testdata1$suicide1)
+performance <- performance(Prediction, "tpr","fpr")
+# plotting ROC curve
+plot(performance,main = "ROC Curve",col = 2,lwd = 2)
+abline(a = 0,b = 1,lwd = 2,lty = 3,col = "black")
+
+#AUC
+DTPrediction1 <- prediction(DTPrediction1[,2],testdata1$suicide1)
+aucDT <- performance(DTPrediction1, measure = "auc")
+aucDT <- aucDT@y.values[[1]]
+aucDT
+```
