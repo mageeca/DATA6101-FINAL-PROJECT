@@ -290,3 +290,178 @@ The average age of white people when they started drinking alcohol is 11.11 wher
 ```{r}
 cor(data[, c("Age_Alc", "Age_Weed","multiple_partners","physical_activity","Hrs_Sleep","age_sex")])
 ```
+
+```{r}
+pairs(data[c("Age_Alc", 
+             "Age_Weed", 
+             "multiple_partners", 
+             "physical_activity",
+             "Hrs_Sleep",
+             "age_sex")],
+      col = "orange",
+      pch = 16,
+      labels = c("Age_Alc", 
+             "Age_Weed", 
+             "multiple_partners", 
+             "physical_activity",
+             "Hrs_Sleep",
+             "age_sex"),
+      main = "Pairplot of variables")
+```
+
+```{r}
+# ---------------------------------------------------------------------------
+# MULTIPLE REGRESSION TO FIND MULTIPLE PARTNERS
+# ---------------------------------------------------------------------------
+attach(data)
+lm.fit <- lm(multiple_partners~Age_Alc  +
+                                    Age_Weed + 
+                                    age_sex +
+                                    race)
+
+summary(lm.fit)
+```
+
+```{r}
+# ---------------------------------------------------------------------------
+# RESIDUALS ANALYSIS
+# 
+qqnorm(residuals(lm.fit))
+qqline(residuals(lm.fit), col="red")
+
+# shapiro.test(residuals(lm.fit))
+```
+
+```{r}
+# ---------------------------------------------------------------------------
+# EVALUATE THE QUALITY OF THE MODEL
+# 
+
+# create a random training and a testing set
+set.seed(1)
+row.number <- sample(1:nrow(data), 0.8*nrow(data))
+
+train <- data[row.number,]
+test <- data[-row.number,]
+
+# estimate the linear fit with the training set
+multi.lm.fit0.8 <- lm(multiple_partners~Age_Alc  +
+                                    Age_Weed + 
+                                    age_sex +
+                                    race, 
+                      data=train)
+summary(multi.lm.fit0.8)
+
+# predict on testing set
+prediction.multi0.8 <- predict(multi.lm.fit0.8, newdata = test)
+err0.8 <- prediction.multi0.8 - test$multiple_partners
+rmse <- sqrt(mean(err0.8^2))
+mape <- mean(abs(err0.8/test$multiple_partners))
+
+c(RMSE=rmse,mape=mape,R2=summary(multi.lm.fit0.8)$r.squared) # to print the 3 parameters
+```
+
+```{r}
+# ---------------------------------------------------------------------------
+# MULTIPLE REGRESSION TO FIND HOURS OF SLEEP
+# ---------------------------------------------------------------------------
+attach(data)
+lm.fit1 <- lm(Hrs_Sleep~Age_Alc  +
+                                    Age_Weed + 
+                                    age_sex +
+                                    race)
+
+summary(lm.fit1)
+```
+
+
+```{r}
+# ---------------------------------------------------------------------------
+# RESIDUALS ANALYSIS
+# 
+qqnorm(residuals(lm.fit1))
+qqline(residuals(lm.fit1), col="red")
+
+# shapiro.test(residuals(lm.fit))
+```
+
+```{r}
+# ---------------------------------------------------------------------------
+# EVALUATE THE QUALITY OF THE MODEL
+# 
+
+# create a random training and a testing set
+set.seed(1)
+row.number <- sample(1:nrow(data), 0.8*nrow(data))
+
+train <- data[row.number,]
+test <- data[-row.number,]
+
+# estimate the linear fit with the training set
+multi.lm.fit0.8_1 <- lm(Hrs_Sleep~Age_Alc  +
+                                    Age_Weed + 
+                                    age_sex +
+                                    race, 
+                      data=train)
+summary(multi.lm.fit0.8_1)
+
+# predict on testing set
+prediction.multi0.8_1 <- predict(multi.lm.fit0.8_1, newdata = test)
+err0.8 <- prediction.multi0.8_1 - test$Hrs_Sleep
+rmse <- sqrt(mean(err0.8^2))
+mape <- mean(abs(err0.8/test$Hrs_Sleep))
+
+c(RMSE=rmse,mape=mape,R2=summary(multi.lm.fit0.8_1)$r.squared) # to print the 3 parameters
+```
+
+```{r}
+# ---------------------------------------------------------------------------
+# MULTIPLE REGRESSION TO FIND PHYSICAL ACTIVITY
+# ---------------------------------------------------------------------------
+attach(data)
+lm.fit2 <- lm(physical_activity~Age_Alc  +
+                                    Age_Weed + 
+                                    age_sex +
+                                    race)
+
+summary(lm.fit2)
+```
+
+```{r}
+# ---------------------------------------------------------------------------
+# RESIDUALS ANALYSIS
+# 
+qqnorm(residuals(lm.fit2))
+qqline(residuals(lm.fit2), col="red")
+
+# shapiro.test(residuals(lm.fit))
+```
+
+```{r}
+# ---------------------------------------------------------------------------
+# EVALUATE THE QUALITY OF THE MODEL
+# 
+
+# create a random training and a testing set
+set.seed(1)
+row.number <- sample(1:nrow(data), 0.8*nrow(data))
+
+train <- data[row.number,]
+test <- data[-row.number,]
+
+# estimate the linear fit with the training set
+multi.lm.fit0.8_2 <- lm(physical_activity~Age_Alc  +
+                                    Age_Weed + 
+                                    age_sex +
+                                    race, 
+                      data=train)
+summary(multi.lm.fit0.8_2)
+
+# predict on testing set
+prediction.multi0.8_2 <- predict(multi.lm.fit0.8_2, newdata = test)
+err0.8 <- prediction.multi0.8_2 - test$physical_activity
+rmse <- sqrt(mean(err0.8^2))
+mape <- mean(abs(err0.8/test$physical_activity))
+
+c(RMSE=rmse,mape=mape,R2=summary(multi.lm.fit0.8_2)$r.squared) # to print the 3 parameters
+```
