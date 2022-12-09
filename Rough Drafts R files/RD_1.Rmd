@@ -447,7 +447,13 @@ plotcp(model3b)
 
 rpart.rules(model3b)
 
+### RMSE, MSE, R-Square
+print(model3b)
+summary(model3b)
 
+p <- predict(model3b, traindata3)
+sqrt(mean((traindata3$Hrs_Sleep-p)^2))  #RMSE
+(cor(traindata3$Hrs_Sleep, p))^2        #R-Square
 ```
 
 Question 3c - Random Forest ------------ 
@@ -466,8 +472,15 @@ testdata3$modelPredicted3c <-predict(model3c, testdata3)
 
 plot(model3c)
 
+### RMSE, MSE, R-Square
+print(model3c)
+summary(model3b)
 
+p <- predict(model3c, traindata3)
+sqrt(mean((traindata3$Hrs_Sleep-p)^2))  #RMSE
+(cor(traindata3$Hrs_Sleep, p))^2        #R-Square
 ```
+
 Question 4
 
 
@@ -547,7 +560,13 @@ plotcp(model4b)
 
 rpart.rules(model4b)
 
+### RMSE, MSE, R-Square
+print(model4b)
+summary(model4b)
 
+p <- predict(model4b, traindata4)
+sqrt(mean((traindata4$multiple_partners-p)^2))  #RMSE
+(cor(traindata4$multiple_partners, p))^2        #R-Square
 ```
 
 Question 4c - Random Forest 
@@ -567,7 +586,13 @@ testdata4$modelPredicted4c <-predict(model4c, testdata4)
 
 plot(model4c)
 
+### RMSE,  R-Square
+print(model4c)
+summary(model4c)
 
+p <- predict(model4c, traindata4)
+sqrt(mean((traindata4$multiple_partners-p)^2))  #RMSE
+(cor(traindata4$multiple_partners, p))^2        #R-Square
 ```
 
 Question 5--------------------------
@@ -648,6 +673,13 @@ plotcp(model5b)
 rpart.rules(model5b)
 
 
+### RMSE, MSE, R-Square
+print(model5b)
+summary(model5b)
+
+p <- predict(model5b, traindata5)
+sqrt(mean((traindata5$physical_activity-p)^2))  #RMSE
+(cor(traindata5$physical_activity, p))^2        #R-Square
 ```
 
 Question 5c - Random Forest 
@@ -667,4 +699,11 @@ testdata5$modelPredicted5c <-predict(model5c, testdata5)
 plot(model5c)
 
 
+### RMSE,  R-Square
+print(model5c)
+summary(model5c)
+
+p <- predict(model5c, traindata5)
+sqrt(mean((traindata5$physical_activity-p)^2))  #RMSE
+(cor(traindata5$physical_activity, p))^2        #R-Square
 ```
