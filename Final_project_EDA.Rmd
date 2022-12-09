@@ -10,6 +10,8 @@ library(ezids)
 library(ggplot2)
 library(dplyr)
 library(corrplot) 
+library(ROCR) 
+library(caTools)
 ```
 
 
@@ -188,6 +190,8 @@ ggplot(race_vs_physicalactivity, aes(fill=physical_activity, y=total_count, x=ph
 
 ```{r}
 data$race <- as.factor(data$race)
+data$suicide1 <- as.factor(data$suicide)
+data$fight1 <- as.factor(data$fight)
 ```
 
 ```{r}
@@ -464,4 +468,117 @@ rmse <- sqrt(mean(err0.8^2))
 mape <- mean(abs(err0.8/test$physical_activity))
 
 c(RMSE=rmse,mape=mape,R2=summary(multi.lm.fit0.8_2)$r.squared) # to print the 3 parameters
+```
+
+
+```{r}
+# Splitting dataset
+split <- sample.split(data, SplitRatio = 0.8)
+split
+   
+train_reg <- subset(data, split == "TRUE")
+test_reg <- subset(data, split == "FALSE")
+   
+# Training model
+logistic_model <- glm(fight1 ~ Age_Weed + Age_Alc + age_sex + race, 
+                      data = train_reg, 
+                      family = "binomial")
+logistic_model
+   
+# Summary
+summary(logistic_model)
+```
+
+```{r}
+# Predict test data based on model
+predict_reg <- predict(logistic_model, 
+                       test_reg, type = "response")
+predict_reg  
+   
+# Changing probabilities
+predict_reg <- ifelse(predict_reg >0.5, 1, 0)
+   
+# Evaluating model accuracy
+# using confusion matrix
+table(test_reg$fight1, predict_reg)
+   
+missing_classerr <- mean(predict_reg != test_reg$fight1)
+print(paste('Accuracy =', 1 - missing_classerr))
+```
+
+```{r}
+# ROC-AUC Curve
+ROCPred <- prediction(predict_reg, test_reg$fight1) 
+ROCPer <- performance(ROCPred, measure = "tpr", 
+                             x.measure = "fpr")
+   
+auc <- performance(ROCPred, measure = "auc")
+auc <- auc@y.values[[1]]
+auc
+   
+# Plotting curve
+plot(ROCPer)
+plot(ROCPer, colorize = TRUE, 
+     print.cutoffs.at = seq(0.1, by = 0.1), 
+     main = "ROC CURVE")
+abline(a = 0, b = 1)
+   
+auc <- round(auc, 4)
+legend(.6, .4, auc, title = "AUC", cex = 1)
+```
+
+```{r}
+# Splitting dataset
+split <- sample.split(data, SplitRatio = 0.8)
+split
+   
+train_reg <- subset(data, split == "TRUE")
+test_reg <- subset(data, split == "FALSE")
+   
+# Training model
+logistic_model1 <- glm(suicide1 ~ Age_Weed + Age_Alc + age_sex + race, 
+                      data = train_reg, 
+                      family = "binomial")
+logistic_model1
+   
+# Summary
+summary(logistic_model1)
+```
+
+```{r}
+# Predict test data based on model
+predict_reg <- predict(logistic_model1, 
+                       test_reg, type = "response")
+predict_reg  
+   
+# Changing probabilities
+predict_reg <- ifelse(predict_reg >0.5, 1, 0)
+   
+# Evaluating model accuracy
+# using confusion matrix
+table(test_reg$suicide1, predict_reg)
+   
+missing_classerr <- mean(predict_reg != test_reg$suicide1)
+print(paste('Accuracy =', 1 - missing_classerr))
+```
+
+```{r}
+# ROC-AUC Curve
+ROCPred <- prediction(predict_reg, test_reg$suicide1) 
+ROCPer <- performance(ROCPred, measure = "tpr", 
+                             x.measure = "fpr")
+   
+auc <- performance(ROCPred, measure = "auc")
+auc <- auc@y.values[[1]]
+auc
+   
+# Plotting curve
+plot(ROCPer)
+plot(ROCPer, colorize = TRUE, 
+     print.cutoffs.at = seq(0.1, by = 0.1), 
+     main = "ROC CURVE")
+abline(a = 0, b = 1)
+   
+auc <- round(auc, 4)
+legend(.6, .4, auc, title = "AUC", cex = 1)
 ```
