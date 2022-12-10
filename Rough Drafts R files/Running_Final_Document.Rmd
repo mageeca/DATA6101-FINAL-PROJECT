@@ -708,11 +708,11 @@ plotcp(model3b)
 ```{r}
 ### RMSE, MSE, R-Square
 print(model3b)
-summary(model3b)
+#summary(model3b)
 
 p <- predict(model3b, traindata3)
 sqrt(mean((traindata3$Hrs_Sleep-p)^2))  #RMSE
-(cor(traindata3$Hrs_Sleep, p))^2 
+(cor(traindata3$Hrs_Sleep, p))^2        #R-Square
 
 ```
 
@@ -744,7 +744,7 @@ plot(model3c)
 ```{r}
 ### RMSE, MSE, R-Square
 print(model3c)
-summary(model3b)
+#summary(model3b)
 ```
 
 ```{r}
@@ -809,7 +809,7 @@ rpart.rules(model4b)
 
 ### RMSE, MSE, R-Square
 print(model4b)
-summary(model4b)
+#summary(model4b)
 
 p <- predict(model4b, traindata4)
 sqrt(mean((traindata4$multiple_partners-p)^2))  #RMSE
@@ -838,7 +838,7 @@ testdata4$modelPredicted4c <-predict(model4c, testdata4)
 plot(model4c)
 ```
 
-```{r}
+```{r setup, include=FALSE}
 ### RMSE,  R-Square
 print(model4c)
 summary(model4c)
@@ -912,7 +912,7 @@ plotcp(model5b)
 rpart.rules(model5b)
 ```
 
-```{r}
+```{r setup, include=FALSE}
 ### RMSE, MSE, R-Square
 print(model5b)
 summary(model5b)
@@ -947,12 +947,12 @@ testdata5$modelPredicted5c <-predict(model5c, testdata5)
 plot(model5c)
 ```
 
-```{r}
+```{r setup, include=FALSE}
 ### RMSE,  R-Square
 print(model5c)
 ```
 
-```{r}
+```{r setup, include=FALSE}
 summary(model5c)
 ```
 
