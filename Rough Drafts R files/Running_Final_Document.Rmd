@@ -60,6 +60,7 @@ Dataset Source: https://www.cdc.gov/healthyyouth/data/yrbs/index.htm
 data$gender <- as.factor(data$gender)
 data$race <- as.factor(data$race)
 ```
+
 ```{r}
 data$fight <- recode(data$fight, '0' = 'yes', '1' = 'no')
 data$suicide <- recode(data$suicide, '0' = 'yes', '1' = 'no')
@@ -95,27 +96,26 @@ legend("topleft", c("Age 8","Age 9","Age 10","Age 11","Age 12","Age 13"), cex=0.
 
 ```
 
-This bar graph illustrates the count of respondents who had their first drink for age from 8 to 13 <correct english abit>. We observe that most respondents started drinking when they were 10 and 12. There are around 500 people who started drink at age 8 and the number increases with 500 as the age increases to 11. Overall we can see that there is an upward trend till age 11 followed by a decline till age 13. 
-
-This bar graph illustrates the count of respondents who smoked weed for the fisr time for age from 8 to 13 <correct english abit>. We observe that few respondents started smoking weed as early as at 8 years. There are more people who starter smokign ar age 9 (almost 1500) than at age 11 (almost 1000). There are around 1750 respondents whi had their first smoke at age 11 and 12.  
-
-
-From the graph above we see that most respondents had their first sexual experience at ages 10, 11 and 13. There are barely 750 respondets whi had their first experience before the age of 10. There is a huge increase in numbers when we go from age 9 to age 10.
+This graph on the far left illustrates the number of respondents who started drinking alcohol between the ages of 8 years and 13 years old. We observe that most respondents started drinking when they were around the ages 10 to 12 years old.The second graph illustrates the number of respondents who smoked marijuana for the first time during the of 8 and 13 years old. We observe that few respondents started smoking weed as early as at 8 years. A majority of individuals started smoking marijuana around the ages of 11 and 12 years old.  Lastly, the graph on the right depicts individuals ages when they had their first romantic experience and  we see that most respondents had their first romantic experience at ages 10, 11 and 13. There are few  respondents that report having their first romantic experience before the age of 10.  
 
 ```{r}
 df <- select_if(data, is.numeric) 
-xkablesummary(na.omit(df), "Summary statistics of pizza datset using the `xkablesummary` function.")
+colnames(df) = c("Age Alcohol", "Age Marijuana", "Sexual Partners","Physical Activity (days)","Sleep (hours)","Age Romantic Relationship")
+xkablesummary(na.omit(df),bso="bordered", "Summary Statistics of Numeric Variables in the Dataset")
 ```
 
-```{r}
+The table above shows the descriptive statistics of the numeric variables used in our analysis. It is important to note that age variables range from 8 years to 13 years old, number of sexual partners ranges from 1 to 6 partners, physical activity represents days of physical activity from 0 to 7 days, and hours of sleep ranges from 4 hours to 10 hours. The average age for first drinking alcohol, smoking marijuana, and having romantic relatonships is about 11 years old. The average number of sexual partners is 3 for adolescents in this sample. The average hours of sleep per night is around 6 hours while the average days of exercise per week is 5 days. 
+
+
+```{r fig.width=2, fig.height=3}
 library(corrplot)
 M <- cor(data[, -c(7, 8, 9, 10)],use="pairwise.complete.obs")
-colnames(M) <- c("Age Alc", "Age Marijuana", "Romantic Partners", "Physical Activity", "Sleep (hrs)","Age Sex")
-rownames(M) <- c("Age Alc", "Age Marijuana", "Romantic Partners", "Physical Activity", "Sleep (hrs)","Age Sex")
-corrplot(M, addCoef.col = 1, number.cex = 0.7,method = c("color"),col = COL2('PRGn'),addgrid.col = 'white',tl.col='black',tl.cex=0.75)
+colnames(M) <- c("Age Alc", "Age Marijuana", "Sexual Partners", "Physical Activity", "Sleep (hrs)","Age Sex")
+rownames(M) <- c("Age Alc", "Age Marijuana", "Sexual Partners", "Physical Activity", "Sleep (hrs)","Age Sex")
+corrplot(M, addCoef.col = 1, number.cex = .5,method = c("color"),col = COL2('PRGn'),addgrid.col = 'white',tl.col='black',tl.cex=0.5)
+mtext("Correlation Matrix of Numeric Variables", at=3.7, line=-2, cex=1)
 
 ```
-
 
 
 ```{r}
@@ -192,7 +192,7 @@ Overall, the results appear to show that the average starting age of smoking mar
 #looking at age started drinking and if ever engaged in a physical fight 
 ggplot(na.omit(data), aes(x=age_sex,fill=fight))+
   geom_bar()+
-  facet_wrap(~fight) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Engaging in a Physical Fight by Age when Individual Started Having Romantic Relationships") + xlab("Age")+ ylab("Frequency ")+ theme(plot.title = element_text(face="bold",hjust = 0.5))+ 
+  facet_wrap(~fight) + theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Engaging in a Physical Fight by Age when Having Romantic Relationships") + xlab("Age")+ ylab("Frequency ")+ theme(plot.title = element_text(face="bold",hjust = 0.5))+ 
   scale_fill_manual(values=colors) 
 ```
 
@@ -201,7 +201,7 @@ The results show that individuals who have not engaged in a physical fight repor
 ```{r}
 #looking at age started drinking and if ever had suicidal thoughts
 ggplot(na.omit(data), aes(x=age_sex, fill=suicide))+
-geom_bar()+facet_wrap(~suicide)+ theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Thoughts of Suicide by Age when Individual Started Having Sex") + xlab("Age")+ ylab("Frequency ")+ theme(plot.title = element_text(face="bold",hjust = 0.5))+ 
+geom_bar()+facet_wrap(~suicide)+ theme(plot.title = element_text(hjust = 0.5)) + ggtitle("Thoughts of Suicide by Age when Having Romantic Relations") + xlab("Age")+ ylab("Frequency ")+ theme(plot.title = element_text(face="bold",hjust = 0.5))+ 
   scale_fill_manual(values=colors) 
 
 ```
@@ -226,21 +226,22 @@ Overall, the results appear to show that the average starting age of romantic re
 
 ```{r}
 race_vs_multipartners <- aov(multiple_partners ~ race, data =data )
-xkabledply(race_vs_multipartners)
+xkabledply(race_vs_multipartners,"One-Way ANOVA of Average Sexual Partners between Racial Groups")
 ```
-Since the p-value of 0.000 is less than the significance level of 0.05, we rejects the null hypothesis that there is NO difference in the average number of romantic partners an individual has had between races.
+We ran a One-Way ANOVA in order to compare the average number of sexual partners between racial groups. Since the p-value of 0.000 is less than the significance level of 0.05, we reject the null hypothesis that there is NO difference in the average number of sexual partners an individual has between races.
 
 ```{r}
 race_vs_physicalactivity <- aov(physical_activity ~ race, data =data )
-xkabledply(race_vs_physicalactivity)
+xkabledply(race_vs_physicalactivity,"One-Way ANOVA of Average Days of Physical Activity between Racial Groups")
 ```
-Since the p-value of 0.000 is less than the significance level of 0.05, we rejects the null hypothesis that there is NO difference in the average days of physical activity between races.
+Similarly, our one-way ANOVA comparing the average days of physical activity between racial groups indicated that there is a statistically significant difference in the average number of days of physical activity between racial groups (p<0.05).
 
 ```{r}
 race_vs_HrsOfSleep <- aov(Hrs_Sleep ~ race, data = data)
-xkabledply(race_vs_HrsOfSleep)
+xkabledply(race_vs_HrsOfSleep,"One-Way ANOVA of Average Hours of Sleep between Racial Groups")
 ```
-Since the p-value of 0.000 is less than the significance level of 0.05, we rejects the null hypothesis that there is NO difference in the average hour of sleeps of different individuals between races.
+The results of our one-way ANOVA comparing the average hours of sleep between racial groups indicates a significant difference in the average hours of sleep each racial group has per night considering p=0.00.
+
 
 ```{r}
 data$race <- recode(data$race, '1' = 'White', '2' = 'Black or African American','3'='Hispanic/Latino','4'='All Other Races')
@@ -318,6 +319,8 @@ confusionMatrix(as.factor(as.numeric(testdata1$modelPredicted1a>0.55)), testdata
 # confMat1 <- table(reference = testdata1$fight1, data = testdata1$modelPredicted1a > 0.55)
 # confMat1
 ```
+Every additional year older an individual is when they first smoke marijuana will decrease the log odds of getting into a physical fight by 0.752, and its p-value (p<0.05) indicates that it is somewhat significant in determining the likelihood of fighting. Similarly, for every one year increase in age for an individuals’ age when they first drink alcohol and for when they have their first romantic relationship, the log odds of getting into a physical fight increases by 0.083 and 0.152 respectively. In relation to racial groups, African American individuals have 1.849 times the odds of getting into a physical fight compared to White individuals. Hispanic/Latino individuals have 2.122 times the odds of getting into a physical fight compared to White individuals while individuals of all other races have 0.314 times the odds of getting into a physical fight compared to White individuals. The classification prediction accuracy of our logistic regression model is about 78% meaning the misclassification error rate is 22%. 
+
 
 ```{r include = FALSE}
 # Predict test data based on model
@@ -347,17 +350,14 @@ auc <- auc@y.values[[1]]
 
    
 # Plotting curve
-plot(ROCPer)
-plot(ROCPer, colorize = TRUE, 
-     print.cutoffs.at = seq(0.1, by = 0.1), 
-     main = "ROC CURVE")
-abline(a = 0, b = 1)
+plot(ROCPer,main = "Receiver Operating Characteristic - Logisitc Regression",col = 2,lwd = 2)
+abline(a = 0,b = 1,lwd = 2,lty = 3,col = "black")
    
 auc <- round(auc, 4)
 legend(.6, .4, auc, title = "AUC", cex = 1)
 ```
 
-Every additional year older an individual is when they first smoke marijuana will decrease the log odds of getting into a physical fight by 0.752, and its p-value (p<0.05) indicates that it is somewhat significant in determining the likelihood of fighting. Similarly, for every one year increase in age for an individuals’ age when they first drink alcohol and for when they have their first romantic relationship, the log odds of getting into a physical fight increases by 0.083 and 0.152 respectively. In relation to racial groups, African American individuals have 1.849 times the odds of getting into a physical fight compared to White individuals. Hispanic/Latino individuals have 2.122 times the odds of getting into a physical fight compared to White individuals while individuals of all other races have 0.314 times the odds of getting into a physical fight compared to White individuals. The classification prediction accuracy of our logistic regression model is about 78% meaning the misclassification error rate is 22%. 
+When looking at the shape of relative operating characteristic curve (ROC), we can see that the performance of the logistic regression classifier model is pretty good. Since the curve is towards the upper left corner, we know the more efficient our test being performed will be. In addition, the area under the curve (AUC) is high at 0.75 which means that the model is good at distinguishing between engaging in a fight and not engaging in a fight. 
 
 
 ### Decision Tree Regression Predicting Engagement in a Physical Fight
@@ -389,8 +389,10 @@ table1b
 ```{r}
 printcp(model1b)
 ```
+According to the rules of the decision tree classifier, the overall probability of fighting is 60%. More specifically the rules of the decision tree indicate that African American or Hispanic/Latino individuals who start smoking marijuana at or beyond age 12 and start drinking alcohol before the age of 13 have a probability of fighting of 0.25 (about 10% of adolescents in the sample fall under this rule). White individuals and individuals of all other races have a probability of fighting of about 0.28 (35% of adolescents in the sample fall under this rule). Individuals that are African American or Hispanic/Latino, started smoking at age 11 or older, started drinking at age 13 or older, and had romantic relations before the age of 13 have a fighting probability of 0.31 (1% of the sample fall under this rule). African American or Latino/Hispanic individuals who started smoking marijuana between the ages of 11 and 12, started drinking before the age of 13, and had romantic relations at or after the age of 12 have a fighting probability of 0.39 (4% of the sample fall under this rule).  African American or Latino/Hispanic individuals who started smoking marijuana between the ages of 11 and 12, started drinking before the age of 13, and had romantic relations before 12 years old have a fighting probability of 0.80 (10% of the sample fall under this rule).  African American or Latino/Hispanic individuals who started smoking marijuana after age 11, started drinking at or after the age of 13, and had romantic relations at or after the age of 13 have a fighting probability of 0.89 (11% of the sample fall under this rule). Lastly, individuals that are African American or Hispanic/Latino and started smoking marijuana before 11 years old have a probability of fighting of 0.96 (29% of individuals fall under this rule). 
 
-```{r}
+
+```{r include = FALSE}
 plotcp(model1b)
 ```
 
@@ -399,7 +401,7 @@ DTPrediction <- predict(model1b, testdata1,type = "prob")
 Prediction <- prediction(DTPrediction[,2],testdata1$fight1)
 performance <- performance(Prediction, "tpr","fpr")
 # plotting ROC curve
-plot(performance,main = "ROC Curve",col = 2,lwd = 2)
+plot(performance,main = "Receiver Operating Characteristic - DecisionTree",col = 2,lwd = 2)
 abline(a = 0,b = 1,lwd = 2,lty = 3,col = "black")
 
 #AUC
@@ -410,8 +412,7 @@ auc <- round(aucDT, 4)
 legend(.6, .4, auc, title = "AUC", cex = 1)
 ```
 
-The overall probability of fighting is 60%. More specifically the rules of the decision tree indicate that African American or Hispanic/Latino individuals who start smoking marijuana at or beyond age 12 and start drinking alcohol before the age of 13 have a probability of fighting of 0.25 (about 10% of adolescents in the sample fall under this rule). White individuals and individuals of all other races have a probability of fighting of about 0.28 (35% of adolescents in the sample fall under this rule). Individuals that are African American or Hispanic/Latino, started smoking at age 11 or older, started drinking at age 13 or older, and had romantic relations before the age of 13 have a fighting probability of 0.31 (1% of the sample fall under this rule). African American or Latino/Hispanic individuals who started smoking marijuana between the ages of 11 and 12, started drinking before the age of 13, and had romantic relations at or after the age of 12 have a fighting probability of 0.39 (4% of the sample fall under this rule).  African American or Latino/Hispanic individuals who started smoking marijuana between the ages of 11 and 12, started drinking before the age of 13, and had romantic relations before 12 years old have a fighting probability of 0.80 (10% of the sample fall under this rule).  African American or Latino/Hispanic individuals who started smoking marijuana after age 11, started drinking at or after the age of 13, and had romantic relations at or after the age of 13 have a fighting probability of 0.89 (11% of the sample fall under this rule). Lastly, individuals that are African American or Hispanic/Latino and started smoking marijuana before 11 years old have a probability of fighting of 0.96 (29% of individuals fall under this rule). 
-
+When looking at the shape of relative operating characteristic curve (ROC), we can see that the performance of the decision tree classifier model is very good. Since the curve is towards the upper left corner, we know the more efficient our test being performed will be. In addition, the area under the curve (AUC) is even higher than the logistic regression classifier at 0.84 which means that the model is good at distinguishing between engaging in a fight and not engaging in a fight. 
 
 ### Random Forest Classifying Engagement in a Physical Fight
 
@@ -434,7 +435,7 @@ testdata1$modelPredicted1c <-predict(model1c, testdata1)
 ```{r}
 confusionMatrix(testdata1$fight1, testdata1$modelPredicted1c)
 ```
-
+The accuracy of the random forest model used to predict engagement in a physical fight from  race, age when an individual first drank alcohol, smoked marijuana, and had romantic relationships is about 84%. 
 ```{r}
 plot(model1c)
 ```
@@ -445,7 +446,7 @@ DTPrediction1 <- predict(model1c, testdata1,type = "prob")
 Prediction <- prediction(DTPrediction1[,2],testdata1$fight1)
 performance <- performance(Prediction, "tpr","fpr")
 # plotting ROC curve
-plot(performance,main = "ROC Curve",col = 2,lwd = 2)
+plot(performance,main = "Receiver Operating Characteristic - Random Forest",col = 2,lwd = 2)
 abline(a = 0,b = 1,lwd = 2,lty = 3,col = "black")
 auc <- round(aucDT, 4)
 legend(.6, .4, auc, title = "AUC", cex = 1)
@@ -455,7 +456,7 @@ DTPrediction1 <- prediction(DTPrediction1[,2],testdata1$fight1)
 aucDT <- performance(DTPrediction1, measure = "auc")
 aucDT <- aucDT@y.values[[1]]
 ```
-The accuracy of the random forest model used to predict engagement in a physical fight from  race, age when an individual first drank alcohol, smoked marijuana, and had romantic relationships  is about 84%. 
+When looking at the shape of relative operating characteristic curve (ROC), we can see that the performance of the random forest classifier model is extremelystrong. Since the curve is towards the upper left corner, we know the more efficient our test being performed will be. In addition, the area under the curve (AUC) is  high at 0.93 which means that the model is very good at distinguishing between engaging in a fight and not engaging in a fight.
 
 ## Modeling Thoughts of Suicide
 
@@ -560,13 +561,17 @@ table2b
 printcp(model2b)
 ```
 
-```{r}
+```{r include = FALSE}
 plotcp(model2b)
 ```
 
-```{r include = FALSE}
-rpart.rules(model2b)
+```{r include=FALSE}
+rpart.rules(model2b, clip.facs = FALSE)
 ```
+
+The rules of the decision tree classifier indicate that adolescents who start smoking marijuana after the age of 10 and have romantic relationships after the age of 12 have a 0.07 chance of being suicidal. For individuals who start smoking marijuana at or after age 10, have romantic relationships before age 12, and have alcohol before age 11 have a 0.11 probability of being suicidal. Similarly, Hispanic/Latino individuals who start smoking marijuana at or after age 10, have romantic relationships before age 12, and drink alcohol at or after age 12 have a 0.11 probability of being suicidal. Hispanic/Latino individuals who have romantic relationships before age 11, smoke marijuana at or after age 10, and drink alcohol between 11 and 12 years old have a 0.15 chance of being suicidal. White, African American, and all other race individuals who smoke marijuana at or after age 10, have romantic relationships before age 12, and drink alcohol at or after 11 years old have a 0.15 probability of being suicidal. White, Hispanic/Latino, and other race individuals who smoke marijuana before age 10 have a 0.30 chance of being suicidal. Hispanic/Latino individuals who have romantic relationships and drink alcohol between 11 and 12 years old and who smoke marijuana after the age of 10 have a 0.89 probability of being suicidal. Lastly, Black/African American individuals who smoke marijuana before the age of 10 have a 0.98 probability of being suicidal. 
+
+
 
 ```{r}
 ### plotting ROC curve and calculating AUC metric
@@ -585,6 +590,8 @@ aucDT <- aucDT@y.values[[1]]
 auc <- round(aucDT, 4)
 legend(.6, .4, auc, title = "AUC", cex = 1)
 ```
+
+The ROC curve is towards the upper left corner which means that the performance of the decision tree classifier model is very efficient. In addition, the area under the curve (AUC) is  0.89 which means that the model is very good at distinguishing between whether or not an adolescent is suicidal.
 
 ### Random Forest Classifying Suicidal Thoughts
 ```{r}
@@ -609,6 +616,7 @@ confusionMatrix(testdata2$suicide1, testdata2$modelPredicted2c)
 
 ```{r}
 plot(model2c)
+varImpPlot(model2c)
 ```
 
 ```{r}
@@ -647,10 +655,14 @@ model3a <- lm(Hrs_Sleep ~  Age_Alc + Age_Weed + age_sex + race, data=traindata3)
 summary(model3a)
 ```
 
+The results of the linear regression show that for every year older an individual is when they start drinking alcohol, they would have about 22 extra minutes of sleep at night. For every year older an individual is when they start smoking marijuana, they would get an extra 34 minutes of sleep per night. Similarly, the older an individual is when they have their first romantic relationship, they get 7 additional minutes of sleep a night. In addition, African American individuals get 11 more minutes of sleep per night compared to White individuals while Hispanic/Latino individuals get 7 minutes less and individuals of all other races get 18 less minutes of sleep per night compared to White individuals.   According to the adjusted R-squared value within the model, race, the ages when an individual started drinking, smoking marijuana, and having romantic relationships explain about ~29% of the variation within hours of sleep. In addition, the large F-statistic and extremely small p-value lead us to reject the null hypothesis and conclude there is is strong evidence that a relationship does exist between hours of sleep and our independent variables.
+
+
 ```{r}
-xkabledply(model3a, title = paste("Model :", format(formula(model3a)) ) )
 xkablevif(model3a)
 ```
+
+
 
 ```{r}
 testdata3$modelPredicted3a <- predict(model3a, newdata = testdata3)
@@ -670,7 +682,6 @@ rmse <- sqrt(mean(err0.8^2))
 mape <- mean(abs(err0.8/testdata3$Hrs_Sleep))
 c(RMSE=rmse,mape=mape,R2=summary(model3a)$r.squared)
 ```
-The results of the linear regression show that for every year older an individual is when they start drinking alcohol, they would have about 22 extra minutes of sleep at night. For every year older an individual is when they start smoking marijuana, they would get an extra 34 minutes of sleep per night. Similarly, the older an individual is when they have their first romantic relationship, they get 7 additional minutes of sleep a night. In addition, African American individuals get 11 more minutes of sleep per night compared to White individuals while Hispanic/Latino individuals get 7 minutes less and individuals of all other races get 18 less minutes of sleep per night compared to White individuals.   According to the adjusted R-squared value within the model, race, the ages when an individual started drinking, smoking marijuana, and having romantic relationships explain about ~29% of the variation within hours of sleep. In addition, the large F-statistic and extremely small p-value lead us to reject the null hypothesis and conclude there is is strong evidence that a relationship does exist between hours of sleep and our independent variables.
 
 ### Decision Tree Regression for Hours of Sleep
 ```{r}
@@ -708,11 +719,11 @@ plotcp(model3b)
 ```{r}
 ### RMSE, MSE, R-Square
 print(model3b)
-#summary(model3b)
+summary(model3b)
 
 p <- predict(model3b, traindata3)
 sqrt(mean((traindata3$Hrs_Sleep-p)^2))  #RMSE
-(cor(traindata3$Hrs_Sleep, p))^2        #R-Square
+(cor(traindata3$Hrs_Sleep, p))^2 
 
 ```
 
@@ -744,7 +755,7 @@ plot(model3c)
 ```{r}
 ### RMSE, MSE, R-Square
 print(model3c)
-#summary(model3b)
+summary(model3b)
 ```
 
 ```{r}
@@ -761,22 +772,33 @@ set.seed(998)
 sample <- sample(c(TRUE, FALSE), nrow(data), replace=TRUE, prob=c(0.8,0.2))
 traindata4  <- data[sample, ]
 testdata4   <- data[!sample, ]
+```
 
-
+```{r}
 model4a <- lm(multiple_partners ~  Age_Alc + Age_Weed + age_sex + race, data=traindata4)
+```
 
+```{r}
 summary(model4a)
+```
 
+The results of the linear regression model predicting number of sexual partners show that the older an individual is when they start drinking, smoking marijuana, and having romantic relationships, their number of sexual partners decreases. In addition, African American individuals have about 1 more sexual partner in comparison to White individuals, while Hispanic/Latino individuals and individuals of other races have less amount of partners in comparison to White individuals. According to the adjusted R-squared value within the model, race, the ages when an individual started drinking, smoking marijuana, and having romantic relationships explain about ~51% of the variation within number of partners. In addition, the large F-statistic and extremely small p-value lead us to reject the null hypothesis and conclude there is is strong evidence that a relationship does exist between number of sexual partners and our independent variables. 
+
+```{r}
 xkabledply(model4a, title = paste("Model :", format(formula(model4a)) ) )
 xkablevif(model4a)
+```
 
-
+```{r}
 testdata4$modelPredicted4a <- predict(model4a, newdata = testdata4)
+```
 
-
+```{r}
 qqnorm(residuals(model4a))
 qqline(residuals(model4a), col="red")
+```
 
+```{r}
 err0.8 <- testdata4$modelPredicted4a - testdata4$multiple_partners
 rmse <- sqrt(mean(err0.8^2))
 mape <- mean(abs(err0.8/testdata4$multiple_partners))
@@ -793,24 +815,35 @@ traindata4  <- data[sample, ]
 testdata4   <- data[!sample, ]
 
 model4b<-rpart(formula = multiple_partners ~  Age_Alc + Age_Weed + race, data=traindata4, method = 'anova')
+```
 
+```{r}
 rpart.plot(model4b)
+```
 
-
-
+```{r}
 testdata4$modelPredicted4b <-predict(model4b, testdata4, type = 'vector')
+```
 
-
-
+```{r}
 printcp(model4b)
+```
+
+```{r}
 plotcp(model4b)
+```
 
+```{r Include = FALSE}
 rpart.rules(model4b)
+```
 
+```{r}
 ### RMSE, MSE, R-Square
 print(model4b)
-#summary(model4b)
+summary(model4b)
+```
 
+```{r}
 p <- predict(model4b, traindata4)
 sqrt(mean((traindata4$multiple_partners-p)^2))  #RMSE
 (cor(traindata4$multiple_partners, p))^2        #R-Square
@@ -838,7 +871,7 @@ testdata4$modelPredicted4c <-predict(model4c, testdata4)
 plot(model4c)
 ```
 
-```{r setup, include=FALSE}
+```{r}
 ### RMSE,  R-Square
 print(model4c)
 summary(model4c)
@@ -858,19 +891,29 @@ set.seed(1027)
 sample <- sample(c(TRUE, FALSE), nrow(data), replace=TRUE, prob=c(0.8,0.2))
 traindata5  <- data[sample, ]
 testdata5   <- data[!sample, ]
+```
 
-
+```{r}
 model5a <- lm(physical_activity ~  Age_Alc + Age_Weed + age_sex + race, data=traindata5)
 summary(model5a)
-xkabledply(model5a, title = paste("Model :", format(formula(model5a)) ) )
+```
+The results of the linear regression predicting number of days of physical activity indicate that for each year older an individual is when they start drinking alcohol and having romantic relationships, their amount of physical activity per week increases by 0.12 and 0.10 of a day respectively. For each year older an individual is when they start smoking weed, their amount of physical activity per week decreases by 0.42 of a day. African American individuals engage in physical activity 1.6 more days week than White individuals while Hispanic/Latino individuals engage in physical activity almost 2 more days a week than White individuals.According to the adjusted R-squared value within the model, race, the ages when an individual started drinking, smoking marijuana, and having romantic relationships explain about ~18% of the variation within number of days of physical activity per week. In addition, the large F-statistic and extremely small p-value lead us to reject the null hypothesis and conclude there is is strong evidence that a relationship does exist between days of physical activtiy per week and our independent variables. 
+
+
+```{r}
 xkablevif(model5a)
+```
 
-
+```{r}
 testdata5$modelPredicted5a <- predict(model5a, newdata = testdata5)
+```
 
-
+```{r}
 qqnorm(residuals(model5a))
 qqline(residuals(model5a), col="red")
+```
+
+```{r}
 
 err0.8 <- testdata5$modelPredicted5a - testdata5$physical_activity
 rmse <- sqrt(mean(err0.8^2))
@@ -912,7 +955,7 @@ plotcp(model5b)
 rpart.rules(model5b)
 ```
 
-```{r setup, include=FALSE}
+```{r include = FALSE }
 ### RMSE, MSE, R-Square
 print(model5b)
 summary(model5b)
@@ -947,12 +990,12 @@ testdata5$modelPredicted5c <-predict(model5c, testdata5)
 plot(model5c)
 ```
 
-```{r setup, include=FALSE}
+```{r}
 ### RMSE,  R-Square
 print(model5c)
 ```
 
-```{r setup, include=FALSE}
+```{r include = FALSE}
 summary(model5c)
 ```
 
