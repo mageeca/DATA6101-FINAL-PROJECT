@@ -107,16 +107,16 @@ xkablesummary(na.omit(df),bso="bordered", "Summary Statistics of Numeric Variabl
 The table above shows the descriptive statistics of the numeric variables used in our analysis. It is important to note that age variables range from 8 years to 13 years old, number of sexual partners ranges from 1 to 6 partners, physical activity represents days of physical activity from 0 to 7 days, and hours of sleep ranges from 4 hours to 10 hours. The average age for first drinking alcohol, smoking marijuana, and having romantic relatonships is about 11 years old. The average number of sexual partners is 3 for adolescents in this sample. The average hours of sleep per night is around 6 hours while the average days of exercise per week is 5 days. 
 
 
-```{r fig.width=2, fig.height=3}
+```{r}
 library(corrplot)
 M <- cor(data[, -c(7, 8, 9, 10)],use="pairwise.complete.obs")
-colnames(M) <- c("Age Alc", "Age Marijuana", "Sexual Partners", "Physical Activity", "Sleep (hrs)","Age Sex")
-rownames(M) <- c("Age Alc", "Age Marijuana", "Sexual Partners", "Physical Activity", "Sleep (hrs)","Age Sex")
-corrplot(M, addCoef.col = 1, number.cex = .5,method = c("color"),col = COL2('PRGn'),addgrid.col = 'white',tl.col='black',tl.cex=0.5)
-mtext("Correlation Matrix of Numeric Variables", at=3.7, line=-2, cex=1)
+colnames(M) <- c("Age Alcohol", "Age Marijuana", "Sexual Partners", "Physical Activity", "Sleep (hrs)","Age Romantic")
+rownames(M) <- c("Age Alcohol", "Age Marijuana", "Sexual Partners", "Physical Activity", "Sleep (hrs)","Age Romantic")
+corrplot(M, addCoef.col = 1, number.cex = .5,method = c("color"),col = COL2('PRGn'),addgrid.col = 'white',tl.col='black',tl.cex=1)
 
 ```
 
+We know that a correlation matrix depicts the correlation coefficients between all the possible pairs of values in a table. Positive correlations are displayed in green and negative correlations are in purple. Color intensity is proportional to the correlation coefficients. We see a mix of positive and negative correlations in the matrix. We see a high positive correlation between the age when the respondent had their first alcoholic drink with age when the respondent first started smoking marijuana and number of hours the respondent sleeps in a day. Also, there is a positive correlation between age when the respondent first started smoking marijuana with number of hours the respondent sleeps in a day and the age when the respondent had their first romantic experience. We see significant negative correlations of number of sexual partners the respondent has with age when the respondent had their first alcoholic drink, age when the respondent first smoked marijuana, number of hours the respondent sleeps in a day, and age when the respondent had their first romantic experience.  
 
 ```{r}
 colors <- c("#428953","#722f8e")
@@ -295,29 +295,26 @@ set.seed(920)
 sample <- sample(c(TRUE, FALSE), nrow(data), replace=TRUE, prob=c(0.8,0.2))
 traindata1  <- data[sample, ]
 testdata1   <- data[!sample, ]
+```
 
-
+```{r}
 model1a<-glm(formula = fight1 ~ Age_Weed + Age_Alc + age_sex + race , family = "binomial", data = traindata1)
+```
 
+```{r}
 summary(model1a)
+```
+
+```{r include=FALSE}
 plot(model1a)
+```
 
-
+```{r}
 testdata1$modelPredicted1a <- predict(model1a, newdata = testdata1, type = 'response')
+```
 
-
+```{r}
 confusionMatrix(as.factor(as.numeric(testdata1$modelPredicted1a>0.55)), testdata1$fight1)
-# 
-# testdata1 <- testdata1  %>% mutate(model_pred1a = 1*(modelPredicted1a > .55) + 0)
-# 
-# testdata1 <- testdata1 %>% mutate(accurate1a = 1*(model_pred1a == fight1))
-# Model1aAccuracyPercentage <- (sum(testdata1$accurate1)/nrow(testdata1))*100
-# Model1aAccuracyPercentage
-# print(paste0("Model accuracy percentage: ", Model1aAccuracyPercentage))
-# 
-# 
-# confMat1 <- table(reference = testdata1$fight1, data = testdata1$modelPredicted1a > 0.55)
-# confMat1
 ```
 Every additional year older an individual is when they first smoke marijuana will decrease the log odds of getting into a physical fight by 0.752, and its p-value (p<0.05) indicates that it is somewhat significant in determining the likelihood of fighting. Similarly, for every one year increase in age for an individuals’ age when they first drink alcohol and for when they have their first romantic relationship, the log odds of getting into a physical fight increases by 0.083 and 0.152 respectively. In relation to racial groups, African American individuals have 1.849 times the odds of getting into a physical fight compared to White individuals. Hispanic/Latino individuals have 2.122 times the odds of getting into a physical fight compared to White individuals while individuals of all other races have 0.314 times the odds of getting into a physical fight compared to White individuals. The classification prediction accuracy of our logistic regression model is about 78% meaning the misclassification error rate is 22%. 
 
@@ -372,8 +369,11 @@ testdata1   <- data[!sample, ]
 model1b<-rpart(formula = fight1 ~ Age_Weed + Age_Alc + age_sex + race , data = traindata1, method = 'class',minsplit = 5, minbucket = 5)
 ```
 
-```{r include = FALSE}
+```{r}
 rpart.plot(model1b, extra = 106)
+```
+
+```{r include = FALSE}
 rpart.rules(model1b, cover = TRUE)
 ```
 
@@ -441,6 +441,11 @@ plot(model1c)
 ```
 
 ```{r}
+varImpPlot(model1c, bg = "purple", cex=1, pch=22, main="RF Feature Importance")
+```
+
+
+```{r}
 ### plotting ROC curve and calculating AUC metric
 DTPrediction1 <- predict(model1c, testdata1,type = "prob")
 Prediction <- prediction(DTPrediction1[,2],testdata1$fight1)
@@ -476,7 +481,7 @@ model2a<-glm(formula = suicide1 ~ Age_Weed + Age_Alc + age_sex + race , family =
 summary(model2a)
 ```
 
-```{r}
+```{r include = FALSE}
 plot(model2a)
 ```
 
@@ -505,9 +510,6 @@ table(testdata2$suicide1, predict_reg)
 missing_classerr <- mean(predict_reg != testdata2$suicide1)
 ```
 
-```{r}
-print(paste('Accuracy =', 1 - missing_classerr))
-```
 
 ```{r}
 # ROC-AUC Curve
@@ -517,15 +519,11 @@ ROCPer <- performance(ROCPred, measure = "tpr",
    
 auc <- performance(ROCPred, measure = "auc")
 auc <- auc@y.values[[1]]
-auc
    
 # Plotting curve
-plot(ROCPer)
-plot(ROCPer, colorize = TRUE, 
-     print.cutoffs.at = seq(0.1, by = 0.1), 
-     main = "ROC CURVE")
-abline(a = 0, b = 1)
-   
+plot(performance,main = "Receiver Operating Characteristic - Logistic Regression",col = 2,lwd = 2)
+abline(a = 0,b = 1,lwd = 2,lty = 3,col = "black")
+
 auc <- round(auc, 4)
 legend(.6, .4, auc, title = "AUC", cex = 1)
 ```
@@ -616,7 +614,7 @@ confusionMatrix(testdata2$suicide1, testdata2$modelPredicted2c)
 
 ```{r}
 plot(model2c)
-varImpPlot(model2c)
+varImpPlot(model2c, bg = "purple", cex=1, pch=22, main="RF Feature Importance")
 ```
 
 ```{r}
@@ -668,19 +666,23 @@ xkablevif(model3a)
 testdata3$modelPredicted3a <- predict(model3a, newdata = testdata3)
 ```
 
-```{r}
-# RESIDUALS ANALYSIS
-# 
-qqnorm(residuals(model3a))
-qqline(residuals(model3a), col="red")
-```
 
 ```{r}
 # predict on testing set
 err0.8 <- testdata3$modelPredicted3a - testdata3$Hrs_Sleep
 rmse <- sqrt(mean(err0.8^2))
 mape <- mean(abs(err0.8/testdata3$Hrs_Sleep))
-c(RMSE=rmse,mape=mape,R2=summary(model3a)$r.squared)
+#c(RMSE=rmse,mape=mape,R2=summary(model3a)$r.squared)
+
+x <- summary(model3a)$r.squared
+sample_list <- list("Root Mean Square Deviation" = round(rmse, digits = 2), "Mean Absolute Percentage Error" = round(mape, digits = 2), 
+               "Multiple R2" = round(x, digits = 2))
+
+max_len <- max(lengths(sample_list))
+df <- do.call(cbind.data.frame, c(lapply(sample_list, function(x) 
+               c(x, rep('', max_len - length(x)))), stringsAsFactors = FALSE))
+
+knitr::kable(df,format="simple",align = "c")
 ```
 
 ### Decision Tree Regression for Hours of Sleep
@@ -717,13 +719,18 @@ plotcp(model3b)
 ```
 
 ```{r}
-### RMSE, MSE, R-Square
-print(model3b)
-summary(model3b)
-
 p <- predict(model3b, traindata3)
-sqrt(mean((traindata3$Hrs_Sleep-p)^2))  #RMSE
-(cor(traindata3$Hrs_Sleep, p))^2 
+rmse <- sqrt(mean((traindata3$Hrs_Sleep-p)^2))  #RMSE
+r2<-(cor(traindata3$Hrs_Sleep, p))^2 
+
+sample_list <- list("Root Mean Square Deviation" = round(rmse, digits = 2),  
+               "Multiple R2" = round(r2, digits = 2))
+
+max_len <- max(lengths(sample_list))
+df <- do.call(cbind.data.frame, c(lapply(sample_list, function(x) 
+               c(x, rep('', max_len - length(x)))), stringsAsFactors = FALSE))
+
+knitr::kable(df,format="simple",align = "c")
 
 ```
 
@@ -751,8 +758,12 @@ testdata3$modelPredicted3c <-predict(model3c, testdata3)
 ```{r}
 plot(model3c)
 ```
-
 ```{r}
+varImpPlot(model3c, bg = "purple", cex=1, pch=22, main="RF Feature Importance")
+```
+
+
+```{r include = FALSE}
 ### RMSE, MSE, R-Square
 print(model3c)
 summary(model3b)
@@ -760,8 +771,17 @@ summary(model3b)
 
 ```{r}
 p <- predict(model3c, traindata3)
-sqrt(mean((traindata3$Hrs_Sleep-p)^2))  #RMSE
-(cor(traindata3$Hrs_Sleep, p))^2        #R-Square
+rmse <- sqrt(mean((traindata3$Hrs_Sleep-p)^2))  #RMSE
+r2 <- (cor(traindata3$Hrs_Sleep, p))^2        #R-Square
+
+sample_list <- list("Root Mean Square Deviation" = round(rmse, digits = 2),  
+               "Multiple R2" = round(r2, digits = 2))
+
+max_len <- max(lengths(sample_list))
+df <- do.call(cbind.data.frame, c(lapply(sample_list, function(x) 
+               c(x, rep('', max_len - length(x)))), stringsAsFactors = FALSE))
+
+knitr::kable(df,format="simple",align = "c")
 ```
 
 ## Modeling Number of Partners
@@ -780,30 +800,33 @@ model4a <- lm(multiple_partners ~  Age_Alc + Age_Weed + age_sex + race, data=tra
 
 ```{r}
 summary(model4a)
+xkablevif(model4a,"VIF scores")
 ```
 
 The results of the linear regression model predicting number of sexual partners show that the older an individual is when they start drinking, smoking marijuana, and having romantic relationships, their number of sexual partners decreases. In addition, African American individuals have about 1 more sexual partner in comparison to White individuals, while Hispanic/Latino individuals and individuals of other races have less amount of partners in comparison to White individuals. According to the adjusted R-squared value within the model, race, the ages when an individual started drinking, smoking marijuana, and having romantic relationships explain about ~51% of the variation within number of partners. In addition, the large F-statistic and extremely small p-value lead us to reject the null hypothesis and conclude there is is strong evidence that a relationship does exist between number of sexual partners and our independent variables. 
 
-```{r}
-xkabledply(model4a, title = paste("Model :", format(formula(model4a)) ) )
-xkablevif(model4a)
-```
 
 ```{r}
 testdata4$modelPredicted4a <- predict(model4a, newdata = testdata4)
 ```
 
 ```{r}
-qqnorm(residuals(model4a))
-qqline(residuals(model4a), col="red")
-```
-
-```{r}
 err0.8 <- testdata4$modelPredicted4a - testdata4$multiple_partners
-rmse <- sqrt(mean(err0.8^2))
-mape <- mean(abs(err0.8/testdata4$multiple_partners))
+rmse <- round(sqrt(mean(err0.8^2)),2)
+mape <- round(mean(abs(err0.8/testdata4$multiple_partners)),2)
 
-c(RMSE=rmse,mape=mape,R2=summary(model4a)$r.squared)
+#c <- c(RMSE=rmse,mape=mape,R2=summary(model4a)$r.squared)
+#format(c)
+x <- summary(model4a)$r.squared
+sample_list <- list("Root Mean Square Deviation" = c(rmse), "Mean Absolute Percentage Error" = c(mape), 
+               "Multiple R2" = round(x, digits = 2))
+
+max_len <- max(lengths(sample_list))
+df <- do.call(cbind.data.frame, c(lapply(sample_list, function(x) 
+               c(x, rep('', max_len - length(x)))), stringsAsFactors = FALSE))
+
+knitr::kable(df,format="simple",align = "c")
+
 ```
 
 ### Decision Tree Regression for Number of Partners 
@@ -833,11 +856,11 @@ printcp(model4b)
 plotcp(model4b)
 ```
 
-```{r Include = FALSE}
+```{r include = FALSE}
 rpart.rules(model4b)
 ```
 
-```{r}
+```{r include = FALSE}
 ### RMSE, MSE, R-Square
 print(model4b)
 summary(model4b)
@@ -845,8 +868,17 @@ summary(model4b)
 
 ```{r}
 p <- predict(model4b, traindata4)
-sqrt(mean((traindata4$multiple_partners-p)^2))  #RMSE
-(cor(traindata4$multiple_partners, p))^2        #R-Square
+rmse <- sqrt(mean((traindata4$multiple_partners-p)^2))  #RMSE
+r2 <- (cor(traindata4$multiple_partners, p))^2        #R-Square
+
+sample_list <- list("Root Mean Square Deviation" = round(rmse, digits = 2),  
+               "Multiple R2" = round(r2, digits = 2))
+
+max_len <- max(lengths(sample_list))
+df <- do.call(cbind.data.frame, c(lapply(sample_list, function(x) 
+               c(x, rep('', max_len - length(x)))), stringsAsFactors = FALSE))
+
+knitr::kable(df,format="simple",align = "c")
 ```
 
 ### Random Forest Regression for Number of Partners 
@@ -872,15 +904,28 @@ plot(model4c)
 ```
 
 ```{r}
-### RMSE,  R-Square
+varImpPlot(model4c, bg = "purple", cex=1, pch=22, main="RF Feature Importance")
+```
+
+
+```{r include = FALSE}
 print(model4c)
 summary(model4c)
 ```
 
 ```{r}
 p <- predict(model4c, traindata4)
-sqrt(mean((traindata4$multiple_partners-p)^2))  #RMSE
-(cor(traindata4$multiple_partners, p))^2        #R-Square
+rmse <- sqrt(mean((traindata4$multiple_partners-p)^2))  #RMSE
+r2 <- (cor(traindata4$multiple_partners, p))^2        #R-Square
+
+sample_list <- list("Root Mean Square Deviation" = round(rmse, digits = 2),  
+               "Multiple R2" = round(r2, digits = 2))
+
+max_len <- max(lengths(sample_list))
+df <- do.call(cbind.data.frame, c(lapply(sample_list, function(x) 
+               c(x, rep('', max_len - length(x)))), stringsAsFactors = FALSE))
+
+knitr::kable(df,format="simple",align = "c")
 ```
 
 ## Modeling Days of Physical Activity
@@ -908,10 +953,6 @@ xkablevif(model5a)
 testdata5$modelPredicted5a <- predict(model5a, newdata = testdata5)
 ```
 
-```{r}
-qqnorm(residuals(model5a))
-qqline(residuals(model5a), col="red")
-```
 
 ```{r}
 
@@ -919,7 +960,18 @@ err0.8 <- testdata5$modelPredicted5a - testdata5$physical_activity
 rmse <- sqrt(mean(err0.8^2))
 mape <- mean(abs(err0.8/testdata5$physical_activity))
 
-c(RMSE=rmse,mape=mape,R2=summary(model5a)$r.squared)
+#c(RMSE=rmse,mape=mape,R2=summary(model5a)$r.squared)
+
+x <- summary(model5a)$r.squared
+sample_list <- list("Root Mean Square Deviation" = round(rmse, digits = 2), "Mean Absolute Percentage Error" = c(mape), 
+               "Multiple R2" = round(x, digits = 2))
+
+max_len <- max(lengths(sample_list))
+df <- do.call(cbind.data.frame, c(lapply(sample_list, function(x) 
+               c(x, rep('', max_len - length(x)))), stringsAsFactors = FALSE))
+
+knitr::kable(df,format="simple",align = "c")
+
 ```
 
 ### Decision Tree Regression for Physical Activity 
@@ -964,8 +1016,17 @@ summary(model5b)
 ```{r}
 
 p <- predict(model5b, traindata5)
-sqrt(mean((traindata5$physical_activity-p)^2))  #RMSE
-(cor(traindata5$physical_activity, p))^2        #R-Square
+rmse <- sqrt(mean((traindata5$physical_activity-p)^2))  #RMSE
+r2 <- (cor(traindata5$physical_activity, p))^2        #R-Square
+
+sample_list <- list("Root Mean Square Deviation" = round(rmse, digits = 2),  
+               "Multiple R2" = round(r2, digits = 2))
+
+max_len <- max(lengths(sample_list))
+df <- do.call(cbind.data.frame, c(lapply(sample_list, function(x) 
+               c(x, rep('', max_len - length(x)))), stringsAsFactors = FALSE))
+
+knitr::kable(df,format="simple",align = "c")
 ```
 
 ### Random Forest Regression for Physical Activity  
@@ -991,9 +1052,9 @@ plot(model5c)
 ```
 
 ```{r}
-### RMSE,  R-Square
-print(model5c)
+varImpPlot(model5c, bg = "purple", cex=1, pch=22, main="RF Feature Importance")
 ```
+
 
 ```{r include = FALSE}
 summary(model5c)
@@ -1001,6 +1062,15 @@ summary(model5c)
 
 ```{r}
 p <- predict(model5c, traindata5)
- sqrt(mean((traindata5$physical_activity-p)^2))  #RMSE
-(cor(traindata5$physical_activity, p))^2        #R-Square
+rmse <- sqrt(mean((traindata5$physical_activity-p)^2))  #RMSE
+r2 <- (cor(traindata5$physical_activity, p))^2        #R-Square
+ 
+ sample_list <- list("Root Mean Square Deviation" = round(rmse, digits = 2),  
+               "Multiple R2" = round(r2, digits = 2))
+
+max_len <- max(lengths(sample_list))
+df <- do.call(cbind.data.frame, c(lapply(sample_list, function(x) 
+               c(x, rep('', max_len - length(x)))), stringsAsFactors = FALSE))
+
+knitr::kable(df,format="simple",align = "c")
 ```
