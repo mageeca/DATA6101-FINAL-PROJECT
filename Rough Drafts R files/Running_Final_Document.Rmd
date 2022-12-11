@@ -42,7 +42,7 @@ library(gplots)
 
 ```{r}
 
-dataset = read.csv("sadc_df.csv") # Importing the dataset
+dataset = read.csv("../sadc_df.csv") # Importing the dataset
 myvars <- c("Age_Alc", "Age_Weed","multiple_partners","physical_activity","Hrs_Sleep","age_sex","race","gender","fight","suicide")
 data <- dataset[myvars]# creating the data frame with the selected variables
 data <- data[data$age_sex != 0,] 
@@ -326,6 +326,7 @@ data$race <- recode(data$race, '1' = 'White', '2' = 'Black or African American',
 ```{r}
 
 # Average values of different columns for different races
+
 agg_df <- aggregate(cbind(data$Hrs_Sleep,data$physical_activity,data$multiple_partner,data$Age_Weed,data$age_sex,data$Age_Alc) ~ data$race, FUN=mean)
 
 colnames(agg_df) = c('Race','Hours of Sleep','Days of Physical Activity','Sexual Partners','Age Smoking Marijuana','Age Having Romantic Relations','Age Drinking Alcohol')
@@ -341,19 +342,41 @@ formattable(agg_df, align =c("l","c","c","c","c", "c", "r"), list(
   'Age Having Romantic Relations'= color_tile(customGreen,customGreen0),
   'Age Drinking Alcohol'= color_tile(customGreen,customGreen0)
 ))
+
 ```
+
+White individuals have the greatest average hours of sleep per night around 6.3 hours while African American individuals have the lowest average hours of sleep per night around 5.5 hours. Hispanic/Latino individuals and individuals of other races have around 6.3 hours and 6.1 hours of sleep per night on average. For physical activity, White individuals and individuals of other races engage in physical activity only 3.9 days a week while African American and Hispanic/Latino individuals work out around 6 days a week on average. African American individuals have the greatest number of sexual partners (~ 5 partners) in comparison to White, Hispanic/Latino, and individuals of other races which all have had around 3 sexual partners. In addition, African American individuals have the youngest average age for smoking marijuana (~9.6 years), having romantic relationships (~10.3 years), and drinking alcohol (~10.1 years) in comparison to all other racial groups.
+
+
+
+
+```{r}
+library(janitor)
+t <- tabyl(na.omit(data), race, fight)
+
+
+
+knitr::kable(t, col.names = c('Race', 'No', 'Yes'),format = "simple",align = "lcc", caption = "Engaging in a Fight by Race") %>%
+kableExtra::kable_styling(bootstrap_options = c("hover"),
+                            full_width = FALSE, position = "float_left")
+
+
+
+t1 <- tabyl(na.omit(data), race, suicide)
+
+
+
+knitr::kable(t1,col.names = c('Race', 'No', 'Yes'),format = "simple",align = "lcc", caption = "Suicidal Thoughts by Race")%>%
+kableExtra::kable_styling(bootstrap_options = c("hover"),
+                          full_width = FALSE, position = "float_right")
+```
+
+
+
+When looking at whether or not individuals have engaged in a physical fight and had thoughts of suicide between races we can see that African American and Hispanic/Latino individuals reported engaging in a fight more than not. They both had around 1200 more individuals report being in a physical fight than those who have not. In contrast, a majority of White individuals and individuals of other races reported never engaging in a physical fight compared to those who have. In regards to reporting suicidal thoughts, the only group that had more individuals report having had suicidal thoughts than those who have not were African American/Black individuals. There were about 1000 more African American/Black individuals who reported having suicidal thoughts than those who have not. For White, Hispanic/Latino, and individuals of other races a majority of people reported never having thoughts of suicide. These results indicate that race may play a crucial role in behavioral and emotional well-being for adolescents.
 The average  hour of sleep by white race is 6.32 hours which is highest among the all the races whereas the average hour of sleep by Hispanic/Latino and Black or African American are 6.26 and 5.516 hours. All other Races sleep 6.11 average hour of sleep.
 
-The average days of physical activity between white races is 3.87 whereas the average days of physical activity between Hispanic/Latino, Black or African American and All Other Races 
-are 5.776, 6.032 and 3.90.
 
-The average number of romantic partners by white races has had is 2.83 whereas the average numbers of romantic partner by Hispanic/Latino, Black or African American and All Other Races has had are 2.64, 5.233 and 2.707 respectively.
-
-The average age of white people when started smoking marijuana is 11.50 whereas the average age of Hispanic/Latino, Black or African American and All Other Races when they started smoking marijuana are 11.51, 9.68 and 11.51 respectively.
-
-The average age of white people when having sex is 11.41 whereas the average age of Hispanic/Latino, Black or African American and All Other Races when they started having sex are 11.60,10.30 and 10.95 respectively.
-
-The average age of white people when they started drinking alcohol is 11.11 whereas the average age of Hispanic/Latino, Black or African American and All Other Races  when they started drinking alcohol are 11.15,10.09 and 11.28 respectively.
 
 ## Modeling Engagement in a Physical Fight
 
