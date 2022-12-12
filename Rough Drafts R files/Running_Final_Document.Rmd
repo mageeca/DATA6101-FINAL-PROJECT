@@ -621,6 +621,9 @@ confusionMatrix(as.factor(as.numeric(testdata2$modelPredicted2a>0.55)), testdata
 
 ```
 
+Every additional year older an individual is when they first smoke marijuana, and for when they have their first romantic relationship will decrease the log odds of getting into a suicide thoughts by 0.81 and 0.24, and its p-value (p<0.05) indicates that it is somewhat significant in determining the likelihood of suicide thoughts. Similarly, for every one year increase in age for an individuals’ age when they first drink alcohol,  the log odds of getting into a suicide thoughts increases by 0.13 respectively. In relation to racial groups, African American individuals have 2.20 times the odds of getting into a physical fight compared to White individuals. Hispanic/Latino individuals have 0.89 times the odds of getting into a physical fight compared to White individuals while individuals of all other races have 0.63 times the odds of getting into a physical fight compared to White individuals. The classification prediction accuracy of our logistic regression model is about 84% meaning the misclassification error rate is 16%.
+
+
 ```{r include = FALSE}
 # Predict test data based on model
 predict_reg <- predict(model2a, 
@@ -704,7 +707,7 @@ Prediction <- prediction(DTPrediction[,2],testdata1$suicide1)
 performance <- performance(Prediction, "tpr","fpr")
 
 # plotting ROC curve
-plot(performance,main = "ROC Curve",col = 2,lwd = 2)
+plot(performance,main = "Receiver Operating Characteristic - DecisionTree",col = 2,lwd = 2)
 abline(a = 0,b = 1,lwd = 2,lty = 3,col = "black")
 
 #AUC
@@ -760,7 +763,7 @@ Prediction <- prediction(DTPrediction1[,2],testdata1$suicide1)
 performance <- performance(Prediction, "tpr","fpr")
 
 # plotting ROC curve
-plot(performance,main = "ROC Curve",col = 2,lwd = 2)
+plot(performance,main = "Receiver Operating Characteristic - Random Forest",col = 2,lwd = 2)
 abline(a = 0,b = 1,lwd = 2,lty = 3,col = "black")
 
 #AUC
