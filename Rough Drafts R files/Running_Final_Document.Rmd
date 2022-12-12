@@ -588,7 +588,7 @@ aucDT <- performance(DTPrediction1, measure = "auc")
 aucDT <- aucDT@y.values[[1]]
 
 ```
-When looking at the shape of relative operating characteristic curve (ROC), we can see that the performance of the random forest classifier model is extremelystrong. Since the curve is towards the upper left corner, we know the more efficient our test being performed will be. In addition, the area under the curve (AUC) is  high at 0.93 which means that the model is very good at distinguishing between engaging in a fight and not engaging in a fight.
+When looking at the shape of relative operating characteristic curve (ROC), we can see that the performance of the random forest classifier model is extremelystrong. Since the curve is towards the upper left corner, we know the more efficient our test being performed will be. In addition, the area under the curve (AUC) is  high at 0.89 which means that the model is very good at distinguishing between engaging in a fight and not engaging in a fight.
 
 ## Modeling Thoughts of Suicide
 
