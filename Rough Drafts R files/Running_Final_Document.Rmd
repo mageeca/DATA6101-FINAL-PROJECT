@@ -917,7 +917,7 @@ varImpPlot(model3c, bg = "purple", cex=1, pch=22, main="RF Feature Importance", 
 
 ```
 
-If you drop Age when first smoked Marijuana from the model, it's prediction power will greatly reduce. On the other hand if we reduce variables like Race and Age when started having romantic relations, there might be some impact on prediction power of the model while removing Age when forst had Alcohol will have the least impact on model.
+If you drop Age when first smoked Marijuana from the model, it's prediction power will greatly reduce. On the other hand if we reduce variables like Race and Age when started having romantic relations, there might be some impact on prediction power of the model while removing Age when first had Alcohol will have the least impact on model.
 
 
 ```{r include = FALSE}
