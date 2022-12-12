@@ -704,7 +704,7 @@ Prediction <- prediction(DTPrediction[,2],testdata1$suicide1)
 performance <- performance(Prediction, "tpr","fpr")
 
 # plotting ROC curve
-plot(performance,main = "ROC Curve",col = 2,lwd = 2)
+plot(performance,main = "Receiver Operating Characteristic - DecisionTree",col = 2,lwd = 2)
 abline(a = 0,b = 1,lwd = 2,lty = 3,col = "black")
 
 #AUC
@@ -760,7 +760,7 @@ Prediction <- prediction(DTPrediction1[,2],testdata1$suicide1)
 performance <- performance(Prediction, "tpr","fpr")
 
 # plotting ROC curve
-plot(performance,main = "ROC Curve",col = 2,lwd = 2)
+plot(performance,main = "Receiver Operating Characteristic - Random Forest",col = 2,lwd = 2)
 abline(a = 0,b = 1,lwd = 2,lty = 3,col = "black")
 
 #AUC
