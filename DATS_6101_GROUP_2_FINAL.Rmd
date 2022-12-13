@@ -1141,7 +1141,7 @@ summary(model5a)
 
 ```
 
-The results of the linear regression predicting number of days of physical activity indicate that for each year older an individual is when they start drinking alcohol and having romantic relationships, their amount of physical activity per week increases by 0.12 and 0.10 of a day respectively. For each year older an individual is when they start smoking Marijuana, their amount of physical activity per week decreases by 0.42 of a day. African American individuals engage in physical activity 1.6 more days week than White individuals while Hispanic/Latino individuals engage in physical activity almost 2 more days a week than White individuals.According to the adjusted R-squared value within the model, race, the ages when an individual started drinking, smoking marijuana, and having romantic relationships explain about ~18% of the variation within number of days of physical activity per week. In addition, the large F-statistic and extremely small p-value lead us to reject the null hypothesis and conclude there is is strong evidence that a relationship does exist between days of physical activtiy per week and our independent variables. 
+The results of the linear regression predicting number of days of physical activity indicate that for each year older an individual is when they start drinking alcohol and having romantic relationships, their amount of physical activity per week increases by 0.12 and 0.10 of a day respectively. For each year older an individual is when they start smoking Marijuana, their amount of physical activity per week decreases by 0.42 of a day. African American individuals engage in physical activity 1.6 more days week than White individuals while Hispanic/Latino individuals engage in physical activity almost 2 more days a week than White individuals.According to the adjusted R-squared value within the model, race, the ages when an individual started drinking, smoking marijuana, and having romantic relationships explain about ~18% of the variation within number of days of physical activity per week. In addition, the large F-statistic and extremely small p-value lead us to reject the null hypothesis and conclude there is is strong evidence that a relationship does exist between days of physical activity per week and our independent variables. 
 
 
 ```{r}
@@ -1176,7 +1176,7 @@ df <- do.call(cbind.data.frame, c(lapply(sample_list, function(x)
 knitr::kable(df,format="simple",align = "c")
 
 ```
-
+The values for the RMSE,MAPE and R Squared parameters are 2.32, 0 and 0.18 are not really in the situation to be called great or the best. As we move on below with other algorithms we will be in a better situation to conclude if the values that we have for this model are worthy and better than the others.
 
 
 
@@ -1197,7 +1197,7 @@ model5b<-rpart(formula = physical_activity ~  Age_Alc + Age_Weed + age_sex + rac
 rpart.plot(model5b)
 
 ```
-
+We Used predictor variables that are as follows - Starting age of Alcohol consumption, Starting age of marujuana consumption, Age when the adolescent has intimate romantic relationships, Race of the adolescent and our Response variable is - Physical activity like exercise in a week. The results of the decision tree show that the tree has expanded up-to 7 levels and it has 9 nodes as per the default splitting method which keeps the tree within the bounds of being pruned to its best possible capability as opposed to us specifying the parameters which might risk making it unpruned and overfitting with the training data.
 ```{r}
 
 testdata5$modelPredicted5b <-predict(model5b, testdata5, type = 'vector')
@@ -1210,6 +1210,10 @@ printcp(model5b)
 plotcp(model5b)
 
 ```
+
+Root node error is the percent of correctly sorted records at the first (root) splitting node while the RMSE value tells that this model’s error performing trait as high.
+The dashed line represents the difference between highest and minimum cross-validated error , plus the standard deviation of the error at that tree. As per the concept the reasonable choice of cp for pruning is often the leftmost value where the mean is less than the horizontal line. In this case, we see that the optimal size of the tree is 7 terminal nodes.
+
 
 ```{r include=FALSE}
 
@@ -1244,6 +1248,8 @@ knitr::kable(df,format="simple",align = "c")
 
 The overall average of number of days of physical activity for the sample is about 5.2 days. The rules of the decision tree indicate that individuals who are White or All Other Races exercise almost 4 days a week. If the individual is Black or African American or Hispanic/Latino, started smoking marijuana before the age of 11 and started drinking alcohol before the age of 11 exercise almost everyday (27% of the respondents fall under this category), while those who started drinking alcohol on or after 11 exercise only 4.5 days a week (Only 2% of the respondents fall under this category). If the individual started smoking marijuana on or after the age of 11 and started drinking alcohol on or after the age of 13 and is Black or African American then the individual has 2.6 days of physical activity in a week (about 1% of the respondents) and if the individual is Latino/Hispanic then the individual exercises almost everyday (about 12% of the respondents fall under this category) on average. If the individual is White or belongs to all other races, started smoking Marijuana on or after 12 and drinking before 13, then the individual exercises 3.7 days a week on average.
 
+We also see that the values of R-sqaured has gone up but the RMSE has has come down so when we look it from the perspective of RMSE the model regression tree is doing a better job as compared to the linear regression model.
+
 
 ### Random Forest Regression for Physical Activity  
 ```{r}
@@ -1273,7 +1279,7 @@ plot(model5c)
 varImpPlot(model5c, bg = "purple", cex=1, pch=22, main="RF Feature Importance", labels = c("Age when first had Alcohol", "Age when started having Romantic Relations", "Age when first smoked Marijuana", "Race"))
 ```
 
-If you drop Race and age when first smoked marijuana and age when started having romantic relations from the model, it's prediction power will greatly reduce. On the other hand if we reduce variables like age when started having romantic relations and age when first had alcohol, there might be some impact on prediction power of the model.
+It is found that Race has the most importance with respect to other features. If you drop Race and age when first smoked marijuana and age when started having romantic relations from the model, it's prediction power will greatly reduce. On the other hand if we reduce variables like age when started having romantic relations and age when first had alcohol, there might be some impact on prediction power of the model.
 
 
 ```{r include = FALSE}
@@ -1298,8 +1304,8 @@ df <- do.call(cbind.data.frame, c(lapply(sample_list, function(x)
 knitr::kable(df,format="simple",align = "c")
 
 ```
-
+To analyze this regression we ran the same piece of code to check the RMSE and R2 values. We are seeing that those values are "relatively better" for R2 values and "relatively lowest" for RMSE value than the previous models.  
 
 ## Conclusion
 
-The results of our project indicate a powerful relationship between age at which individuals being engaging in risky behaviors and adolescent interpersonal, physical, and mental well-being. Our models, especially our logistic regression and random forest models looking at suicidal thoughts and engagement in a physical fight, showed promising results in regards to helping predict factors that have to do with adolescent well-being. Our models show great potential for making an impact in the area of adolescent mental and physical health. Future studies would also benefit from looking at the context in which adolescents begin engaging in risky behaviors. Though age of engagement in risky behavior is a great indicator of future well-being, it would be helpful to know why adolescents may start to engage in behaviors like drinking or smoking marijuana earlier rather than later in life. 
+The results of our project indicate a powerful relationship between age at which individuals being engaging in risky behaviors and adolescent interpersonal, physical, and mental well-being. Our models, especially our logistic regression and random forest models looking at suicidal thoughts and engagement in a physical fight, showed promising results in regards to helping predict factors that have to do with adolescent well-being. Our models show great potential for making an impact in the area of adolescent mental and physical health. Future studies would also benefit from looking at the context in which adolescents begin engaging in risky behaviors. Though age of engagement in risky behavior is a great indicator of future well-being, it would be helpful to know why adolescents may start to engage in behaviors like drinking or smoking marijuana earlier rather than later in life. To improve model performance, we can include more significant factors such as gender, parents' education, and family financial status in the pool of variables to more precisely determine the results in the current study.Of course it would require data aggregation and mapping from various sources and surveys. With scope for hyperparamater tuning and inclusion of other models we have room for learning and extracting more out of this dataset and the comparative study.
