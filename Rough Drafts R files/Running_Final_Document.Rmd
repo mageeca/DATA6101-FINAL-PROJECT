@@ -372,16 +372,12 @@ kableExtra::kable_styling(bootstrap_options = c("hover"),
 ```
 
 
-
 When looking at whether or not individuals have engaged in a physical fight and had thoughts of suicide between races we can see that African American and Hispanic/Latino individuals reported engaging in a fight more than not. They both had around 1200 more individuals report being in a physical fight than those who have not. In contrast, a majority of White individuals and individuals of other races reported never engaging in a physical fight compared to those who have. In regards to reporting suicidal thoughts, the only group that had more individuals report having had suicidal thoughts than those who have not were African American/Black individuals. There were about 1000 more African American/Black individuals who reported having suicidal thoughts than those who have not. For White, Hispanic/Latino, and individuals of other races a majority of people reported never having thoughts of suicide. These results indicate that race may play a crucial role in behavioral and emotional well-being for adolescents.
 The average  hour of sleep by white race is 6.32 hours which is highest among the all the races whereas the average hour of sleep by Hispanic/Latino and Black or African American are 6.26 and 5.516 hours. All other Races sleep 6.11 average hour of sleep.
 
-Q - How did you select and determine the correct model to answer your question?
+## Modelling : Selection and Implementation
 
 In order to figure out the best model for our question, we had to understand what the main things that were vital to understanding adolescent well-being. We had to brainstorm how to understand such the broad phenomenon that is well-being. We ultimately decided to focus on variables that encompass mental, physical, and interpersonal well-being. We choose to look at number of sexual partners, amount of physical activity, hours of sleep, fighting, and suicidal thoughts to gather a full range of information from our three main domains of well-being. I think a main influence in choosing our models was the styles of our target variables. We had numeric responses for physical activity, number of sexual partners, and hours of sleep as well as binary responses (yes/no) for asking if individuals have ever engaged in a physical fight or if they have ever had thoughts of suicide. When choosing our models for our binary variables we decided that logistic regression and decision tree classifiers would be our best options. We thought logistic regressions would be beneficial for giving us a concrete idea of the relationship between our variables and how our predictors can change the log odds of our target variables. This model worked especially well for our project because we could look at age (in years) and see how increasing in age could change the odds of fitting a certain class of our target variable (e.g., having suicidal thoughts or not) So this model helped us concretely understand if being younger or older when first engaging in risky behavior effected their well-being as measured by the binary variables of fighting and suicidal thoughts. When thinking about our project and the correct models in relationship to real world implications, we would rather have a model that falsely classifies a non-suicidal individual as suicidal as opposed to the other way around. Though our project isn’t deciding any real cases, it was still important to think about when choosing our models. Sacrifices must be made when model building especially for situations where a low sensitivity rate (lots of false negatives) can be the decider between life and death. 
-
-
-## Models and the Predictions we can make with them
 
 There are quite a few things we can predict using our models. There are two variables based on classification and three variables based on regression. 
 
@@ -404,10 +400,11 @@ Linear regression attempts to model the relationship between two or more variabl
 Linear regression performs exceptionally well for linearly separable data. It is easy to implement, interpret and efficient to train but It is prone to noise, overfitting and multicollinearity.
 
 
+### Modeling Engagement in a Physical Fight
 
-## Modeling Engagement in a Physical Fight
 
-### Logistic Regression Predicting Engagement in a Physical Fight 
+#### Logistic Regression Predicting Engagement in a Physical Fight 
+
 ```{r}
 
 # Recoding Dataset
@@ -491,7 +488,7 @@ legend(.6, .4, auc, title = "AUC", cex = 1)
 When looking at the shape of relative operating characteristic (ROC) curve, we can see that the performance of the logistic regression classifier model is pretty good. Since the curve is towards the upper left corner, we know the more efficient our test being performed will be. In addition, the area under the curve (AUC) is high at 0.75 which means that the model is good at distinguishing between engaging in a fight and not engaging in a fight. 
 
 
-### Decision Tree Classifying Predicting Engagement in a Physical Fight
+#### Decision Tree Classifying Predicting Engagement in a Physical Fight
 
 ```{r}
 
@@ -555,7 +552,7 @@ legend(.6, .4, auc, title = "AUC", cex = 1)
 
 When looking at the shape of relative operating characteristic (ROC) curve, we can see that the performance of the decision tree classifier model is very good. Since the curve is towards the upper left corner, we know the more efficient our test being performed will be. In addition, the area under the curve (AUC) is even higher than the logistic regression classifier at 0.84 which means that the model is good at distinguishing between engaging in a fight and not engaging in a fight. 
 
-### Random Forest Classifying Engagement in a Physical Fight
+#### Random Forest Classifying Engagement in a Physical Fight
 
 ```{r}
 
@@ -617,9 +614,9 @@ aucDT <- aucDT@y.values[[1]]
 ```
 When looking at the shape of relative operating characteristic curve (ROC), we can see that the performance of the random forest classifier model is extremelystrong. Since the curve is towards the upper left corner, we know the more efficient our test being performed will be. In addition, the area under the curve (AUC) is  high at 0.89 which means that the model is very good at distinguishing between engaging in a fight and not engaging in a fight.
 
-## Modeling Thoughts of Suicide
+### Modeling Thoughts of Suicide
 
-### Logistic Regression Predicting Suicidal Thoughts
+#### Logistic Regression Predicting Suicidal Thoughts
 ```{r}
 
 set.seed(927)
@@ -686,7 +683,7 @@ legend(.6, .4, auc, title = "AUC", cex = 1)
 
 When looking at the shape of relative operating characteristic curve (ROC), we can see that the performance of the logistic regression classifier model is pretty good. Since the curve is towards the upper left corner, we know the more efficient our test being performed will be. In addition, the area under the curve (AUC) is high at 0.78 which means that the model is good at distinguishing between whether or not an adolescent is suicidal.
 
-### Decision Tree Classifying Suicidal Thoughts
+#### Decision Tree Classifying Suicidal Thoughts
 ```{r}
 
 set.seed(927)
@@ -749,7 +746,7 @@ legend(.6, .4, auc, title = "AUC", cex = 1)
 
 The ROC curve is towards the upper left corner which means that the performance of the decision tree classifier model is very efficient. In addition, the area under the curve (AUC) is  0.89 which means that the model is very good at distinguishing between whether or not an adolescent is suicidal.
 
-### Random Forest Classifying Suicidal Thoughts
+#### Random Forest Classifying Suicidal Thoughts
 ```{r}
 
 set.seed(920)
@@ -806,9 +803,9 @@ legend(.6, .4, auc, title = "AUC", cex = 1)
 The ROC curve is towards the upper left corner which means that the performance of the decision tree classifier model is very efficient. In addition, the area under the curve (AUC) is 0.93 which means that the model is extremely good at distinguishing between whether or not an adolescent is suicidal.
 
 
-## Modeling Hours of Sleep per Night
+### Modeling Hours of Sleep per Night
 
-### Multiple Linear Regression Predicting Hours of Sleep
+#### Multiple Linear Regression Predicting Hours of Sleep
 ```{r}
 
 set.seed(997)
@@ -862,7 +859,7 @@ knitr::kable(df,format="simple",align = "c")
 
 ```
 
-### Decision Tree Regression for Hours of Sleep
+#### Decision Tree Regression for Hours of Sleep
 ```{r}
 
 set.seed(997)
@@ -918,7 +915,7 @@ knitr::kable(df,format="simple",align = "c")
 
 The overall hours of sleep for the sample is about 6.1 hours on average. The rules of the decision tree indicate that Hispanic/Latino individuals who started smoking marijuana before age 11 and drinking before the age of 10 have about 4.2 hours of sleep per night (8% of individuals fall under this rule). All non-Hispanic/Latino individuals who started smoking marijuana before the age of 11 get about 5.4 hours of sleep per night while Hispanic/Latino individuals who started smoking marijuana before age 11 and started drinking at or after 10 years old get 6.1 hours of sleep per night. Similarly, White, African American/Black, and individuals of other races who smoked marijuana at or after age 11 and drank at or after 13 years get 6.1 hours of sleep per night. Individuals who smoke marijuana at or after age 11 and drank after age 13 years old get 6.3 hours per night. Lastly, Hispanic/Latino individuals who start smoking marijuana at 11 years or older and who start drinking alcohol at age 13 or later get about 7.9 hours of sleep per night. 
 
-### Random Forest Regression for Hours of Sleep
+#### Random Forest Regression for Hours of Sleep
 ```{r}
 
 set.seed(997)
@@ -975,9 +972,9 @@ knitr::kable(df,format="simple",align = "c")
 
 ```
 
-## Modeling Number of Partners
+### Modeling Number of Partners
 
-### Multiple Linear Regression Predicting Number of Partners
+#### Multiple Linear Regression Predicting Number of Partners
 ```{r}
 
 set.seed(998)
@@ -1029,7 +1026,7 @@ knitr::kable(df,format="simple",align = "c")
 
 ```
 
-### Decision Tree Regression for Number of Partners 
+#### Decision Tree Regression for Number of Partners 
 ```{r}
 
 set.seed(998)
@@ -1092,7 +1089,7 @@ knitr::kable(df,format="simple",align = "c")
 The overall average for number of sexual partners for the sample is about 3.4 partners. The rules of the decision tree indicate that individuals who started smoking marijuana on or after age 11 and started drinking before the age of 13 have about 2.7 partners (52% of the respondents fall under this category) on average. Individuals who started smoking marijuana on or after age 11, started drinking after the age of 13 and are Hispanic/Latino have about 1.1 partners (12% of the respondents fall under this category) on average while those who are not Hispanic/Latino have 2.6 partners on average. For individuals who started smoking marijuana before age 11 and are White, Hispanic or All other races have 4.2 partners (14% of the respondents fall under this category) on average while those who are Black or African American have almost 6 partners (19% of the respondents fall under this category) on average.
 
 
-### Random Forest Regression for Number of Partners 
+#### Random Forest Regression for Number of Partners 
 ```{r}
 
 set.seed(998)
@@ -1149,9 +1146,9 @@ knitr::kable(df,format="simple",align = "c")
 
 ```
 
-## Modeling Days of Physical Activity
+### Modeling Days of Physical Activity
 
-### Multiple Linear Regression Predicting Physical Activity
+#### Multiple Linear Regression Predicting Physical Activity
 ```{r}
 
 set.seed(1027)
@@ -1206,7 +1203,7 @@ knitr::kable(df,format="simple",align = "c")
 
 
 
-### Decision Tree Regression for Physical Activity 
+#### Decision Tree Regression for Physical Activity 
 ```{r}
 
 set.seed(1027)
@@ -1271,7 +1268,7 @@ knitr::kable(df,format="simple",align = "c")
 The overall average of number of days of physical activity for the sample is about 5.2 days. The rules of the decision tree indicate that individuals who are White or All Other Races exercise almost 4 days a week. If the individual is Black or African American or Hispanic/Latino, started smoking marijuana before the age of 11 and started drinking alcohol before the age of 11 exercise almost everyday (27% of the respondents fall under this category), while those who started drinking alcohol on or after 11 exercise only 4.5 days a week (Only 2% of the respondents fall under this category). If the individual started smoking marijuana on or after the age of 11 and started drinking alcohol on or after the age of 13 and is Black or African American then the individual has 2.6 days of physical activity in a week (about 1% of the respondents) and if the individual is Latino/Hispanic then the individual exercises almost everyday (about 12% of the respondents fall under this category) on average. If the individual is White or belongs to all other races, started smoking Marijuana on or after 12 and drinking before 13, then the individual exercises 3.7 days a week on average.
 
 
-### Random Forest Regression for Physical Activity  
+#### Random Forest Regression for Physical Activity  
 ```{r}
 
 set.seed(1027)
