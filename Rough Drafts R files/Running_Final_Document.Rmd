@@ -381,6 +381,30 @@ Q - How did you select and determine the correct model to answer your question?
 In order to figure out the best model for our question, we had to understand what the main things that were vital to understanding adolescent well-being. We had to brainstorm how to understand such the broad phenomenon that is well-being. We ultimately decided to focus on variables that encompass mental, physical, and interpersonal well-being. We choose to look at number of sexual partners, amount of physical activity, hours of sleep, fighting, and suicidal thoughts to gather a full range of information from our three main domains of well-being. I think a main influence in choosing our models was the styles of our target variables. We had numeric responses for physical activity, number of sexual partners, and hours of sleep as well as binary responses (yes/no) for asking if individuals have ever engaged in a physical fight or if they have ever had thoughts of suicide. When choosing our models for our binary variables we decided that logistic regression and decision tree classifiers would be our best options. We thought logistic regressions would be beneficial for giving us a concrete idea of the relationship between our variables and how our predictors can change the log odds of our target variables. This model worked especially well for our project because we could look at age (in years) and see how increasing in age could change the odds of fitting a certain class of our target variable (e.g., having suicidal thoughts or not) So this model helped us concretely understand if being younger or older when first engaging in risky behavior effected their well-being as measured by the binary variables of fighting and suicidal thoughts. When thinking about our project and the correct models in relationship to real world implications, we would rather have a model that falsely classifies a non-suicidal individual as suicidal as opposed to the other way around. Though our project isn’t deciding any real cases, it was still important to think about when choosing our models. Sacrifices must be made when model building especially for situations where a low sensitivity rate (lots of false negatives) can be the decider between life and death. 
 
 
+## Models and the Predictions we can make with them
+
+There are quite a few things we can predict using our models. There are two variables based on classification and three variables based on regression. 
+
+We can classify if someone been in a physical fight and if they ever had thoughts of suicide. We can also predict the number of hours of sleep every night, number of romantic partners and days of physical activity in a week.
+
+All of our models are based on 4 models - Logistic Regression, Linear Regression, Decision Tree and Random Forest. 
+
+Logistic regression is a process of modeling the probability of a discrete outcome given one or more independent variables. This logistic regression models a binary outcome; something that can take only two values such as true/false, yes/no, and so on. 
+We chose logistic regression because there was very little multicollinearity between the predictor variables, the independent variables were linearly related to the dependent variables, and we had a fairly large dataset.
+We saw that logistic regression was much easier to implement than the other methods. There are a few disadvantages with logistic regression like it assumes linearity between the predicted (dependent) variable and the predictor (independent) variables. It fails to predict a continuous outcome, and is not accurate if the sample size is too small. 
+
+Decision Tree is one of the most powerful and popular tools for classification and prediction. A Decision tree has a flowchart-like tree structure, where each node denotes a test on an attribute, each branch represents an outcome of the test, and each terminal node holds a class label or a value. 
+Decision trees are able to generate understandable rules, perform classification without requiring much computation, handle both continuous and categorical variables and provide a clear indication of which fields are most important for prediction or classification.
+We also saw that Decision trees are less appropriate for estimation tasks where the goal is to predict the value of a continuous attribute, prone to errors in classification problems with many classes and a relatively small number of training examples and are computationally expensive to train. 
+
+Random Forest is an ensemble technique which is capable of performing both regression and classification tasks using multiple decision trees and techniques called Bootstrap and Aggregation. The idea behind this is to combine multiple decision trees to determine the final output rather than relying on separate decision trees. 
+Overall, Random Forest reduces overfitting in decision trees and helps to improve the accuracy and works well with both categorical and continuous values but it requires more computational power as well as other compute resources because it builds numerous trees to combine their outputs. It also fails to determine the significance of each variable.
+
+Linear regression attempts to model the relationship between two or more variables by fitting a linear equation on observed data. A linear regression line equation is in the form y = mx+c, where x is the independent variable and y is the dependent variable. The slope of the line is m, and c is the intercept (the value of y when x = 0).
+Linear regression performs exceptionally well for linearly separable data. It is easy to implement, interpret and efficient to train but It is prone to noise, overfitting and multicollinearity.
+
+
+
 ## Modeling Engagement in a Physical Fight
 
 ### Logistic Regression Predicting Engagement in a Physical Fight 
